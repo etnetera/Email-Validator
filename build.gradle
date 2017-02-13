@@ -1,5 +1,6 @@
 group 'cz.etn'
 version '1.0-SNAPSHOT'
+ext.libs_shared=//store/install/Java/tomcat/lib/_gradle
 
 task wrapper(type: Wrapper) {
     gradleVersion = '3.1'
@@ -20,6 +21,7 @@ buildscript {
 
 apply plugin: 'etn-base'
 apply plugin: 'java'
+apply plugin: 'buildinfo'
 
 sourceCompatibility = 1.8
 
@@ -35,6 +37,8 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
 
+tasks.jar.dependsOn tasks.buildinfo
+
 jar {
     enabled = true
     manifest {
@@ -45,3 +49,19 @@ jar {
         )
     }
 }
+
+uploadArchives {
+    enabled = true
+    repositories {
+        ivy {
+            url = "$artifactory/etn"
+        }
+        flatDir { dirs "$libs_shared/$project.group/$project.name/$version" }
+    }
+}
+
+
+    uploadArchives.repositories.ivy.credentials {
+        username = ""
+        password = ""
+    }
