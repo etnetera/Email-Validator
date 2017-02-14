@@ -1,11 +1,11 @@
 group 'cz.etn'
 version '1.0-SNAPSHOT'
-ext.libs_shared=//store/install/Java/tomcat/lib/_gradle
+ext.libs_shared =//store/install/Java/tomcat/lib/_gradle
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '3.1'
-    distributionUrl = "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
-}
+        task wrapper(type: Wrapper) {
+            gradleVersion = '3.1'
+            distributionUrl = "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
+        }
 
 
 buildscript {
@@ -22,14 +22,13 @@ buildscript {
 apply plugin: 'etn-base'
 apply plugin: 'java'
 apply plugin: 'buildinfo'
-apply plugin: 'etn-lib'
 
 sourceCompatibility = 1.8
 
 repositories {
     ivy { url = "$artifactory/etn-all" }
 
-    maven { url = "http://repository.pentaho.org/artifactory/repo/"	}
+    maven { url = "http://repository.pentaho.org/artifactory/repo/" }
     mavenCentral()
 }
 
@@ -43,7 +42,7 @@ tasks.jar.dependsOn tasks.buildinfo
 jar {
     enabled = true
     manifest {
-        attributes( 'Implementation-Title': 'Gradle Quickstart',
+        attributes('Implementation-Title': 'Gradle Quickstart',
                 'Implementation-Version': version,
                 'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
                 'Main-Class': 'cz.etn.emailvalidator.Main'
@@ -61,4 +60,9 @@ uploadArchives {
     }
 }
 
-
+if (hasProperty("etn.artifactory.user")) {
+    uploadArchives.repositories.ivy.credentials {
+        username = getProperty("etn.artifactory.user")
+        password = getProperty("etn.artifactory.password")
+    }
+}
