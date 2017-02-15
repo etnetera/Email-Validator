@@ -54,7 +54,7 @@ uploadArchives {
     enabled = true
     repositories {
         ivy {
-            url = "$artifactory/etn"
+            url = "$artifactory/etn-snapshots"
         }
         flatDir { dirs "$libs_shared/$project.group/$project.name/$version" }
     }
