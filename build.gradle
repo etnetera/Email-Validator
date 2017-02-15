@@ -19,8 +19,7 @@ buildscript {
     }
 }
 
-apply plugin: 'etn-base'
-apply plugin: 'java'
+apply plugin: 'etn-lib'
 apply plugin: 'buildinfo'
 
 sourceCompatibility = 1.8
@@ -28,8 +27,6 @@ sourceCompatibility = 1.8
 repositories {
     ivy { url = "$artifactory/etn-all" }
 
-    maven { url = "http://repository.pentaho.org/artifactory/repo/" }
-    mavenCentral()
 }
 
 dependencies {
@@ -39,16 +36,7 @@ dependencies {
 
 tasks.jar.dependsOn tasks.buildinfo
 
-jar {
-    enabled = true
-    manifest {
-        attributes('Implementation-Title': 'Gradle Quickstart',
-                'Implementation-Version': version,
-                'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
-                'Main-Class': 'cz.etn.emailvalidator.Main'
-        )
-    }
-}
+
 
 uploadArchives {
     enabled = true
@@ -60,9 +48,3 @@ uploadArchives {
     }
 }
 
-if (hasProperty("etn.artifactory.user")) {
-    uploadArchives.repositories.ivy.credentials {
-        username = getProperty("etn.artifactory.user")
-        password = getProperty("etn.artifactory.password")
-    }
-}
