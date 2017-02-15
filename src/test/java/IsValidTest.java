@@ -1,12 +1,19 @@
 import cz.etn.emailvalidator.Email;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.TestFactory;
+
+import java.util.Arrays;
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Created by TPa on 14.02.17.
  */
 public class IsValidTest {
 
-	String[] validEmails = {
+	private static final String[] validEmails = {
 			"daniel.dvorak@etnetera.cz",
 			"prettyandsimple@example.com",
 			"very.common@example.com",
@@ -29,7 +36,7 @@ public class IsValidTest {
 			"abc.\"defghi\".xyz@example.com",
 			"\"abcdefghixyz\"@example.com"
 	};
-	String[] invalidEmails = {
+	private static final String[] invalidEmails = {
 			"nemohotmail.com",
 			"@hotmail.com",
 			"nemo@",
@@ -55,29 +62,19 @@ public class IsValidTest {
 			"abc\\\"def\\\"ghi@example.com"
 	};
 
-	@Test
-	void testValid() {
-		System.out.println("Valid emails:");
-		for(String email : validEmails) {
-			Email e = new Email(email);
-			Email.Error error = e.getError();
-			if (error != null) {
-				System.err.println(email + "\t\t" + error + "\t\tlocalPart: " + e.getLocalPart() + "\tdomain: " + e.getDomain() + "\t" + e.domains);
-
-			}
-
-		}
+	@TestFactory
+	Stream<DynamicTest> testValid() {
+		return DynamicTest.stream(
+				Arrays.asList(validEmails).iterator(),
+				email -> "Testing " + email,
+				email -> assertNull(new Email(email).getError()));
 	}
 
-	@Test
-	void testInvalid() {
-		System.out.println("\n\nInvalid emails:");
-		for(String email : invalidEmails) {
-			Email e = new Email(email);
-			Email.Error error = e.getError();
-			if(error == null) {
-				System.err.println(email + "\t\t" + error + "\t\tlocalPart: " + e.getLocalPart() + "\tdomain: " + e.getDomain() + "\t" + e.domains);
-			}
-		}
+	@TestFactory
+	Stream<DynamicTest> testInValid() {
+		return DynamicTest.stream(
+				Arrays.asList(invalidEmails).iterator(),
+				email -> "Testing " + email,
+				email -> assertNotNull(new Email(email).getError()));
 	}
 }
