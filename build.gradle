@@ -20,12 +20,12 @@ buildscript {
 }
 
 apply plugin: 'etn-lib'
-apply plugin: 'buildinfo'
+//apply plugin: 'buildinfo'
 
 sourceCompatibility = 1.8
 
 repositories {
-    ivy { url = "$artifactory/etn-all" }
+    //ivy { url = "$artifactory/etn-all" }
 
 }
 
@@ -34,17 +34,6 @@ dependencies {
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.0.0-M3'
 }
 
-tasks.jar.dependsOn tasks.buildinfo
+//tasks.jar.dependsOn tasks.buildinfo
 
-
-
-uploadArchives {
-    enabled = true
-    repositories {
-        ivy {
-            url = "$artifactory/etn-snapshots"
-        }
-        flatDir { dirs "$libs_shared/$project.group/$project.name/$version" }
-    }
-}
 
