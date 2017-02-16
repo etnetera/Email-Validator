@@ -1,4 +1,6 @@
-package cz.etn.emailvalidator;
+package cz.etn.emailvalidator.lists;
+
+import cz.etn.emailvalidator.Utils;
 
 import java.util.Arrays;
 import java.util.HashSet;

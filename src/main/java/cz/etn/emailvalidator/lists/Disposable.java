@@ -1,4 +1,4 @@
-package cz.etn.emailvalidator;
+package cz.etn.emailvalidator.lists;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -1310,6 +1310,10 @@ public class Disposable {
 			"lackmail.ru"
 	);
 
+
+	public static boolean isDisposable(String domain) {
+		return disposableList.contains(domain);
+	}
 
 	private static void check() throws Exception {
 		URL url = new URL("https://gist.githubusercontent.com/hassanazimi/d6e49469258d7d06f9f4/raw/3290da2d85dbce01b37e5fd4fcc219778bd69b35/disposable_email_addresses");

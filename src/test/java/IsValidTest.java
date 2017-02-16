@@ -48,6 +48,7 @@ public class IsValidTest {
 			"nemo@.hotmail.com",
 			"nemo@-hotmail.com",
 			".nemo@hotmail.com",
+			"test.@seznam.cz",
 			"Abc.example.com",//(no @ character)
 			"A@b@c@example.com",// (only one @ is allowed outside quotation marks)
 			"a\"b(c)d,e:f;g<h>i[j\\k]l@example.com",// (none of the special characters in this local-part are allowed outside quotation marks)

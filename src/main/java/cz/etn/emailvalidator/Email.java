@@ -1,5 +1,14 @@
 package cz.etn.emailvalidator;
 
+import com.sun.mail.smtp.SMTPTransport;
+import cz.etn.emailvalidator.enums.Error;
+import cz.etn.emailvalidator.enums.Warning;
+import cz.etn.emailvalidator.lists.Disposable;
+import cz.etn.emailvalidator.lists.Suggestions;
+import cz.etn.emailvalidator.lists.TopLevelDomain;
+
+import javax.mail.Session;
+import javax.mail.URLName;
 import javax.naming.CommunicationException;
 import javax.naming.NameNotFoundException;
 import javax.naming.NamingException;
@@ -9,8 +18,6 @@ import java.util.*;
 import java.util.Map.Entry;
 
 //import org.apache.log4j.Logger;
-
-//import com.etnetera.projects.ami.helpers.Utils;
 
 /**
  * http://stackoverflow.com/questions/2049502/what-characters-are-allowed-in-email-address
@@ -39,7 +46,6 @@ public class Email {
 	private static final int MAX_LENGTH = 254;
 	public static final int SMTP_PORT = 25;
 	public static final int SMTP_SSL_PORT = 465;
-
 
 
 //	private static final List<String> PROHIBITED_LOCAL_PARTS = Arrays.asList("sex");
@@ -204,10 +210,11 @@ public class Email {
 	public List<String> domains;
 	private String localPart;
 	private Error error;
-	private Warning warning;
+	private List<Warning> warning = new ArrayList<>();
 	private boolean parsed = false;
 	private List<Error> errors;
 	private List<String> mxServers;
+	private String suggestion;
 
 	//============== KOSTRUKTORY A TOVARNI METODY ===============================
 	public Email(String email) {
@@ -251,12 +258,20 @@ public class Email {
 		if (this.domain == null)//nemame domenu
 			return false;
 
+		if (suggestion != null) {
+			this.warning.add(Warning.TYPO);
+		}
+
 		/*if(isDomainInValidMailServersMap(ctx))//domena je v seznamu jiz uspesne dorucenych mail serveru
 			return true;*/
 
 		if (!isValidDomain()) {//je domena platna(existuje)???
-			this.warning = Warning.BAD_DOMAIN;
+			this.warning.add(Warning.BAD_DOMAIN);
 			return false;
+		}
+
+		if (Disposable.isDisposable(this.domain)) {
+			this.warning.add(Warning.DISPOSABLE);
 		}
 
 		return true;
@@ -273,9 +288,13 @@ public class Email {
 	/**
 	 * @return
 	 */
-	public Warning getWarning() {
+	public List<Warning> getWarnings() {
 		if (!parsed) parse();
 		return warning;
+	}
+
+	public String getSuggestion() {
+		return suggestion;
 	}
 
 
@@ -338,17 +357,15 @@ public class Email {
 
 		if (obj instanceof Email)
 			return this.email.equals(((Email) obj).getEmail());
-		else if (obj instanceof String)
-			return this.email.equals(obj);
 		else
-			return false;
+			return obj instanceof String && this.email.equals(obj);
 	}
 
 
 	/**
 	 * @return
 	 */
-	public String getSuggestion() {
+	public String createSuggestion() {
 		String localPartSuggestion = localPart;
 		String domainSuggestion = domain;
 
@@ -407,7 +424,8 @@ public class Email {
 		if (domainSuggestion != null && !domainSuggestion.equals(domain)) {
 			String result = localPartSuggestion + "@" + domainSuggestion;
 			if (!this.email.equals(result))
-				return result;
+				this.suggestion = result;
+			return result;
 		}
 
 		return null;
@@ -438,7 +456,6 @@ public class Email {
 			return null;
 
 		map = sortByValue(map);
-//		return Misc.prettyMapPrint(map);
 
 		Entry<String, Integer> entry = map.entrySet().iterator().next();
 		if (entry.getValue() < 4)
@@ -449,31 +466,6 @@ public class Email {
 
 	public String getDomainSuggestion() {
 		return getDomainSuggestion(this.domain);
-	}
-
-	//TODO toString
-
-	/**
-	 * @param start
-	 * @param end
-	 * @return
-	 * @throws Exception
-	 */
-	public static String testDomains(int start, int end) throws Exception {
-		if (VALID_EMAIL_SERVERS_MAP == null) readValidDomains();
-		StringBuilder sb = new StringBuilder();
-		sb.append("VALID_EMAIL_SERVERS_MAP size: ").append(VALID_EMAIL_SERVERS_MAP.size()).append("\n");
-		List<String> domains = new ArrayList<>(VALID_EMAIL_SERVERS_MAP);
-		for (String d : domains.subList(start, end)) {
-			List<String> mx = DNSLookup.getMXServers(d);
-			List<String> ips = DNSLookup.getIPAddresses(d);
-			if (mx.isEmpty() && ips.isEmpty()) {
-				sb.append(d).append("\t\t");
-				sb.append(mx).append("\t\t");
-				sb.append(ips).append("\n");
-			}
-		}
-		return sb.toString();
 	}
 
 	public static String checkDomain(String domain) {
@@ -497,34 +489,6 @@ public class Email {
 		return null;
 	}
 
-	public static String checkDomainWithMX(String domain) {
-		StringBuilder sb = new StringBuilder();
-		try {
-			List<String> mx = DNSLookup.getMXServers(domain);
-			List<String> ip = DNSLookup.getIPAddresses(domain);
-			List<String> host = new ArrayList<>();
-			try {
-				for (String i : ip) {
-					host.add(DNSLookup.getRevName(i));
-				}
-			} catch (CommunicationException | NameNotFoundException ignore) {
-			}
-			sb.append("{\"").append(domain).append("\",\"\"},//\tMX: ").append(mx).append("\t\tIP: ").append(ip).append("\t\tHOST: ").append(host).append("\n");
-			if (!Suggestions.DOMAIN_TYPING_ERRORS.containsKey(domain))
-				sb.append("Add to DOMAIN_TYPING_ERRORS!!!\n");
-
-			if (mx.isEmpty())
-				sb.append(checkMailSever(domain)).append("\n\n");
-
-			for (String mailserver : mx) {
-				sb.append(checkMailSever(mailserver)).append("\n\n");
-			}
-		} catch (Exception e) {
-			sb.append(Utils.exceptionToString(e)).append("\n");
-		}
-		return sb.toString();
-	}
-
 	public static String checkMailSever(String mailserver) {
 		StringBuilder sb = new StringBuilder();
 		try {
@@ -535,11 +499,10 @@ public class Email {
 			mailProps.put("mail.smtp.host", mailserver);
 			mailProps.put("mail.host", mailserver);
 			mailProps.put("mail.smtp.port", String.valueOf(SMTP_PORT));
-			//TODO
-			/*SMTPTransport smtp = new SMTPTransport(Session.getInstance(mailProps), new URLName(mailserver));
+			SMTPTransport smtp = new SMTPTransport(Session.getInstance(mailProps), new URLName(mailserver));
 			smtp.connect(socket);
 			sb.append(smtp.getLastReturnCode());//http://www.serversmtp.com/en/smtp-error
-			sb.append(smtp.getLastServerResponse());*/
+			sb.append(smtp.getLastServerResponse());
 		} catch (Exception e) {
 			sb.append(Utils.exceptionToString(e)).append("\n");
 		}
@@ -548,12 +511,7 @@ public class Email {
 
 	//============== SOUKROME METODY INSTANCE ===================================
 	private static void readValidDomains() {
-		// TODO
-		/*try {
-			VALID_EMAIL_SERVERS_MAP = new HashSet<>(Ami.getDbHelper().executeQuery(Ami.getROConnection(ctx), new FirstColumn<String>(), "SELECT DISTINCT(SUBSTRING_INDEX(LOWER(email),'@',-1)) FROM email WHERE state = 'VALID'"));
-		} catch (Exception e) {
-			//LOG.error("unable to read valid domains from db", e);
-		}*/
+		VALID_EMAIL_SERVERS_MAP = new HashSet<>();
 	}
 
 	private static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
@@ -580,11 +538,11 @@ public class Email {
 		char lastChar = 0;
 		for (char ch : this.email.toCharArray()) {
 
-			if (isAsciiDigit(ch) || isNumber(ch)) {//[a-zA-Z0-9]
+			if (Utils.isAsciiDigit(ch) || Utils.isNumber(ch)) {//[a-zA-Z0-9]
 				sb.append(ch);
 				if (part == EmailPart.DOMAIN)
 					domainStr.append(ch);
-			} else if (isAt(ch)) {//@
+			} else if (Utils.isAt(ch)) {//@
 				if (part == EmailPart.DOMAIN) {
 					sb.append(ch);
 					addError(Error.MULTIPLE_AT);
@@ -597,14 +555,14 @@ public class Email {
 					sb = new StringBuilder();
 					part = EmailPart.DOMAIN;
 				}
-			} else if (isDot(ch)) {//tecka
+			} else if (Utils.isDot(ch)) {//tecka
 				sb.append(ch);
 				if (sb.length() == 1) {//ani local part ani domain nemuze zacinat teckou
 					if (part == EmailPart.DOMAIN)
 						addError(Error.PERIOD_FOLLOWING_AT);
 					else
 						addError(Error.STARTS_WITH_A_PERIOD);
-				} else if (isDot(lastChar)) {//posledni znak byla taky tecka
+				} else if (Utils.isDot(lastChar)) {//posledni znak byla taky tecka
 					sb.append(ch);
 					//nemuzou byt dve tecky v domene ani v local partu
 					if (part == EmailPart.DOMAIN)
@@ -618,13 +576,13 @@ public class Email {
 						domainStr = new StringBuilder();
 					}
 				}
-			} else if (isHyphen(ch)) {//spojovnik/minus
+			} else if (Utils.isHyphen(ch)) {//spojovnik/minus
 				sb.append(ch);
 				if (part == EmailPart.DOMAIN && sb.length() == 1)//spojovnik nemuze byt na zacatku domeny
 					addError(Error.HYPHEN_FOLLOWING_AT);
 				if (part == EmailPart.DOMAIN)
 					domainStr.append(ch);
-			} else if (isDoubleQuote(ch)) {//dvojite uvozovky
+			} else if (Utils.isDoubleQuote(ch)) {//dvojite uvozovky
 				sb.append(ch);
 				if (part == EmailPart.DOMAIN) {//nepovoleno v domene
 					addError(Error.BAD_CHARACTER);
@@ -639,7 +597,7 @@ public class Email {
 					 * neither is abc\"def\"ghi@example.com).
 					 */
 					//TODO
-					if (isBackSlash(lastChar)) {//oescapovane uvozovky
+					if (Utils.isBackSlash(lastChar)) {//oescapovane uvozovky
 						if (part == EmailPart.LOCAL_PART)
 							addError(Error.BAD_CHARACTER);
 					} else {
@@ -650,19 +608,19 @@ public class Email {
 						}
 					}
 				}
-			} else if (isSpace(ch)) {//mezera
+			} else if (Utils.isSpace(ch)) {//mezera
 				sb.append(ch);
 				if (part == EmailPart.DOMAIN)
 					domainStr.append(ch);
 				if (part == EmailPart.DOMAIN || part == EmailPart.LOCAL_PART)//mezera je povolena pouze v uvozovkach
 					addError(Error.BAD_CHARACTER);
-			} else if (isNameSpecialCharacter(ch)) {
+			} else if (Utils.isNameSpecialCharacter(ch)) {
 				sb.append(ch);
 				if (part == EmailPart.DOMAIN)
 					domainStr.append(ch);
 				if (part == EmailPart.DOMAIN)
 					addError(Error.BAD_CHARACTER);
-			} else if (isNameQuotedSpecialCharacter(ch)) {
+			} else if (Utils.isNameQuotedSpecialCharacter(ch)) {
 				sb.append(ch);
 				if (part == EmailPart.DOMAIN)
 					domainStr.append(ch);
@@ -682,7 +640,6 @@ public class Email {
 			this.domain = sb.toString();
 			if (domainStr.length() > 0) {
 				domains.add(domainStr.toString());
-				domainStr = new StringBuilder();
 			}
 
 		} else {
@@ -703,6 +660,10 @@ public class Email {
 				addError(Error.ENDS_WITH_PERIOD);
 			if (this.domain.endsWith("-"))
 				addError(Error.ENDS_WITH_HYPHEN);
+		}
+		if (this.localPart != null) {
+			if (this.localPart.endsWith("."))
+				addError(Error.BAD_CHARACTER);
 		}
 
 		if (this.error == null) {
@@ -739,6 +700,7 @@ public class Email {
 				}
 			}
 		}
+		this.suggestion = createSuggestion();
 	}
 
 	/**
@@ -762,278 +724,6 @@ public class Email {
 			this.error = error;
 	}
 
-	/**
-	 * Vraci smtp code po navazani spojeni jinak null
-	 * http://www.serversmtp.com/en/smtp-error
-	 *
-	 * @param mx
-	 * @return
-	 */
-	private static Integer getMxServerStatus(String mx, int port) {
-		try {
-			Properties mailProps = new Properties();
-			mailProps.put("mail.smtp.host", mx);
-			mailProps.put("mail.host", mx);
-			mailProps.put("mail.smtp.port", String.valueOf(port));
-			// TODO fix
-			/*SMTPTransport smtp = new SMTPTransport(Session.getInstance(mailProps), new URLName(mx));
-			Socket socket = new Socket(InetAddress.getByName(mx), port);
-			smtp.connect(socket);
-			return Integer.valueOf(smtp.getLastReturnCode());*/
-		} catch (Exception e) {
-			//LOG.error("unable to check mx server", e);
-		}
-		return null;
-	}
-
-	//*******************************************************************************************/
-	//*** detekce znaku **** http://www.ascii.cl/htmlcodes.htm **********************************/
-	//*******************************************************************************************/
-
-	/**
-	 * mezera/space
-	 *
-	 * @param ch
-	 * @return
-	 */
-	private boolean isSpace(char ch) {
-		return ch == 32;
-	}
-
-	/**
-	 * ! vykricnik ASCII 33
-	 *
-	 * @param ch
-	 * @return
-	 */
-	private boolean isExclamationPoint(char ch) {
-		return ch == 33;
-	}
-
-	/**
-	 * "
-	 *
-	 * @param ch
-	 * @return
-	 */
-	private boolean isDoubleQuote(char ch) {
-		return ch == 34;
-	}
-
-	/**
-	 * #
-	 *
-	 * @param ch
-	 * @return
-	 */
-	@SuppressWarnings("unused")
-	private boolean isNumberSign(char ch) {
-		return ch == 35;
-	}
-
-	@SuppressWarnings("unused")
-	private boolean isDollarSign(char ch) {
-		return ch == 36;
-	}
-
-	@SuppressWarnings("unused")
-	private boolean isPercentSign(char ch) {
-		return ch == 37;
-	}
-
-	@SuppressWarnings("unused")
-	private boolean isAmpersand(char ch) {
-		return ch == 38;
-	}
-
-	/**
-	 * (
-	 *
-	 * @param ch
-	 * @return
-	 */
-	private boolean isOpeningParenthesis(char ch) {
-		return ch == 40;
-	}
-
-	/**
-	 * )
-	 *
-	 * @param ch
-	 * @return
-	 */
-	private boolean isClosingParenthesis(char ch) {
-		return ch == 41;
-	}
-
-	private boolean isAsterisk(char ch) {
-		return ch == 42;
-	}
-
-	private boolean isPlusSign(char ch) {
-		return ch == 43;
-	}
-
-	/**
-	 * ,
-	 *
-	 * @param ch
-	 * @return
-	 */
-	private boolean isComma(char ch) {
-		return ch == 44;
-	}
-
-	/**
-	 * Character - (minus, hyphen, spojovnik) (ASCII: 45)
-	 *
-	 * @param ch
-	 * @return
-	 */
-	private boolean isHyphen(char ch) {
-		return ch == 45;
-	}
-
-	/**
-	 * Character . (dot, period, full stop, tecka) (ASCII: 46)
-	 *
-	 * @param ch
-	 * @return
-	 */
-	private boolean isDot(char ch) {
-		return ch == 46;
-	}
-
-	private boolean isSlash(char ch) {
-		return ch == 47;
-	}
-
-	/**
-	 * Digits 0 to 9 (ASCII: 48-57)
-	 *
-	 * @param ch
-	 * @return
-	 */
-	private boolean isNumber(char ch) {
-		return ch >= 48 && ch <= 57;
-	}
-
-	private boolean isColon(char ch) {
-		return ch == 58;
-	}
-
-	private boolean isSemicolon(char ch) {
-		return ch == 59;
-	}
-
-	private boolean isLessThanSign(char ch) {
-		return ch == 60;
-	}
-
-	private boolean isEqualSign(char ch) {
-		return ch == 61;
-	}
-
-	private boolean isGreaterThanSign(char ch) {
-		return ch == 62;
-	}
-
-	private boolean isQuestionMark(char ch) {
-		return ch == 63;
-	}
-
-	private boolean isAt(char ch) {
-		return ch == 64;
-	}
-
-	/**
-	 * (a-z) (ASCII: 65-90)
-	 *
-	 * @param ch
-	 * @return
-	 */
-	private boolean isAsciiLowerCaseDigit(char ch) {
-		return ch >= 65 && ch <= 90;
-	}
-
-	private boolean isOpeningBracket(char ch) {
-		return ch == 91;
-	}
-
-	private boolean isBackSlash(char ch) {
-		return ch == 92;
-	}
-
-	private boolean isClosingBracket(char ch) {
-		return ch == 93;
-	}
-
-	/**
-	 * (A-Z) (ASCII: 97-122)
-	 *
-	 * @param ch
-	 * @return
-	 */
-	private boolean isAsciiUpperCaseDigit(char ch) {
-		return ch >= 97 && ch <= 122;
-	}
-
-	@SuppressWarnings("unused")
-	private boolean isDomainAllowedCharacter(char ch) {
-		return isAsciiDigit(ch) || isNumber(ch) || isDot(ch) || isHyphen(ch);
-	}
-
-	/**
-	 * (a–z, A–Z) (ASCII: 65-90, 97-122)
-	 *
-	 * @param ch
-	 * @return
-	 */
-	private boolean isAsciiDigit(char ch) {
-		return isAsciiLowerCaseDigit(ch) || isAsciiUpperCaseDigit(ch);
-	}
-
-
-	/**
-	 * Characters !#$%&'*+-/=?^_`{|}~ (ASCII: 33, 35-39, 42, 43, 45, 47, 61, 63, 94-96, 123-126)
-	 *
-	 * @param ch
-	 * @return
-	 */
-	private boolean isNameSpecialCharacter(char ch) {
-		return isHyphen(ch)//'-'
-				|| isExclamationPoint(ch)//'!'
-				|| (ch >= 35 && ch <= 39)//#$%&' 35-39
-				|| isAsterisk(ch)//'*'
-				|| isPlusSign(ch)//'+'
-				|| isSlash(ch)//'/'
-				|| isEqualSign(ch)//'='
-				|| isQuestionMark(ch)//'?'
-				|| (ch >= 94 && ch <= 96)//^_` 94-96
-				|| (ch >= 123 && ch <= 126);//{|}~ 123-126
-	}
-
-	/**
-	 * space and "(),:;<>@[\]  (ASCII: 34, 40-41, 44, 58-59, 60, 62, 64, 91-93)
-	 *
-	 * @param ch
-	 * @return
-	 */
-	private boolean isNameQuotedSpecialCharacter(char ch) {
-		return isSpace(ch)
-				|| isOpeningParenthesis(ch)
-				|| isClosingParenthesis(ch)
-				|| isComma(ch)
-				|| isColon(ch)
-				|| isSemicolon(ch)
-				|| isLessThanSign(ch)
-				|| isGreaterThanSign(ch)
-				|| isAt(ch)
-				|| isOpeningBracket(ch)
-				|| isBackSlash(ch)
-				|| isClosingBracket(ch);
-	}
-
 
 	//============== VNORENE A VNITRNI TRIDY ====================================
 
@@ -1043,168 +733,7 @@ public class Email {
 	private enum EmailPart {
 		LOCAL_PART,
 		DOMAIN,
-		LOCAL_PART_IN_DOUBLE_QUOTES;
-	}
-
-	/**
-	 * @author DDv
-	 */
-	public enum Error {
-		/**
-		 * Email address is missing the "@" sign. For example: "nemohotmail.com"
-		 */
-		MISSING_AT("missing '@'", "adresa neobsahuje '@'"),
-		/**
-		 * Email address is missing the handle portion of the address. For example: "@hotmail.com"
-		 */
-		MISSING_USERNAME("missing username", "adresa neobsahuje jm\u00E9no (\u010D\u00E1st p\u0159ed '@')"),
-		/**
-		 * Email address is missing the domain portion of the address. For example: "nemo@".
-		 */
-		MISSING_DOMAIN("missing domain", "adresa neobsahuje dom\u00E9nu (\u010D\u00E1st za '@')"),
-		/**
-		 * Email address has multiple "@" signs. For example: "nemo@@hotmail.com".
-		 */
-		MULTIPLE_AT("multiple '@'", "adresa obsahuje '@' v\u00EDcekr\u00E1t"),
-		/**
-		 * Email address has prohibited characters such as a bracket "["or other unusual characters.
-		 */
-		BAD_CHARACTER("bad character", "adresa obsahuje zak\u00E1zan\u00E9 znaky"),
-		/**
-		 * Email address has multiple ‘.com’s at the end of the address. For example: "nemo@aol.com.com"
-		 */
-		DOUBLE_TLD("double top level domail", "adresa obsahuje v\u00EDcekr\u00E1t dom\u00E9nu prvn\u00EDho \u0159\u00E1du"),
-		/**
-		 * Email address is missing the top domain, or the top level domain is invalid.
-		 */
-		BAD_TLD("bad top level domain", "adresa obsahuje chybnou dom\u00E9nu prvn\u00EDho \u0159\u00E1du"),
-		/**
-		 * Email address has less than 6 characters or over 100 characters.
-		 */
-		BAD_LENGTH("bad length", "chybn\u00E1 d\u00E9lka adresy"),
-		/**
-		 * Email address does not meet RFC standards and/or has multiple errors.
-		 */
-		CONTAINS_MULTIPLE_TYPOS("contains multiple typos", "adresa obsahuje v\u00EDce chyb"),
-		/**
-		 * Email address ends with a period – For example: "nemo@hotmail.com."
-		 */
-		ENDS_WITH_PERIOD("ends with period", "adresa kon\u010D\u00ED te\u010Dkou"),
-		/**
-		 * Email address ends with a hyphen – For example: "nemo@hotmail.com-"
-		 */
-		ENDS_WITH_HYPHEN("ends with hyphen", "adresa kon\u010D\u00ED spojovn\u00EDkem (-)"),
-		/**
-		 * Email address has multiple periods in the domain. For example: "nemo@hotmail..com"
-		 */
-		DOUBLE_PERIOD_IN_DOMAIN("double period in domain", "adresa obsahuje zdvojenou te\u010Dku v dom\u00E9n\u011B"),
-		/**
-		 * Email address has multiple periods in the local part. For example: "ne..mo@hotmail.com"
-		 */
-		DOUBLE_PERIOD_IN_LOCAL_PART("double period in local part", "adresa obsahuje zdvojenou te\u010Dku"),
-		/**
-		 * Email address has a period after the '@' sign. For example: "nemo@.hotmail.com"
-		 */
-		PERIOD_FOLLOWING_AT("period following '@'", "adresa obsahuje te\u010Dku za '@'"),
-		/**
-		 * Email address has a hyphen after the '@' sign. For example: "nemo@-hotmail.com"
-		 */
-		HYPHEN_FOLLOWING_AT("hyphen following '@'", "adresa osahuje '-' za '@'"),
-		/**
-		 * Email address starts with a period. For example: ".nemo@hotmail.com"
-		 */
-		STARTS_WITH_A_PERIOD("starts with a period", "adresa za\u010D\u00EDn\u00E1 te\u010Dkou");
-		private final String messageEn;
-		private final String messageCs;
-
-		Error(String messageEn, String messageCs) {
-			this.messageEn = messageEn;
-			this.messageCs = messageCs;
-		}
-
-		public String getMessageEn() {
-			return messageEn;
-		}
-
-		public String getMessageCs() {
-			return messageCs;
-		}
-	}
-
-	/**
-	 * @author DDv
-	 */
-	public enum Warning {
-		/**
-		 * Email address failed FreshAddress’s deliverability check. Our proprietary algorithm utilizes our knowledgebase of confirmed undeliverable email addresses and email specific activity to determine if the email address is valid and available to accept email.
-		 */
-		INVALID_EMAIL_ACCOUNT("invalid email account", "invalid email account", EmailState.INVALID_EMAIL_ACCOUNT),//TODO
-		/**
-		 * Email address is associated with a domain with inactive mail servers.
-		 */
-		BAD_DOMAIN("bad domain", "bad domain", EmailState.BAD_DOMAIN),//TODO
-		/**
-		 * Email address with a restricted handle and/or domain which is a likely suspect for being a fake or undesirable entry.
-		 */
-		BOGUS("bogus", "bogus", EmailState.BOGUS),//TODO
-		/**
-		 * Email address matches an entry on client provided suppression.
-		 */
-		CLIENT_RESTRICTED("client restricted", "client restricted", EmailState.CLIENT_RESTRICTED),//TODO
-		/**
-		 * Email address originates from a website that provides temporary email addresses.
-		 */
-		DISPOSABLE("disposable", "disposable", EmailState.DISPOSABLE),//TODO
-		/**
-		 * Email addresses belonging to DMA’s "Do Not Email List" (Electronic Mail Preference Service). Those who have registered have requested to be removed from national marketing lists.
-		 */
-		EMPS_SUPPRESSION("EMPS suppression", "EMPS suppression", EmailState.EMPS_SUPPRESSION),//TODO
-		/**
-		 * Email address owner is known to submit spam/abuse complaints.
-		 */
-		FREQUENT_COMPLAINER("frequent complainer", "frequent complainer", EmailState.FREQUENT_COMPLAINER),//TODO
-		/**
-		 * Email address failed a domain specific rule, e.g. gmail.com does not allow underscores in the address handle.
-		 */
-		DOMAIN_SPECIFIC_SYNTAX_ERROR("domain specific syntax error", "domain specific syntax error", EmailState.DOMAIN_SPECIFIC_SYNTAX_ERROR),//TODO
-		/**
-		 * Email address contains derogatory words.
-		 */
-		LANGUAGE("language", "language", EmailState.LANGUAGE),//TODO
-		/**
-		 * Email address is considered as problematic – includes spamtraps and potentially toxic addresses.
-		 */
-		PROBLEMATIC("problematic", "problematic", EmailState.PROBLEMATIC),//TODO
-		/**
-		 * Email addresses such as sales@, info@ and webmaster@.
-		 */
-		ROLE_ACCOUNT("role account", "role account", EmailState.ROLE_ACCOUNT),//TODO
-		/**
-		 * Email address originates from an FCC wireless domain.
-		 */
-		FFC_WIRELESS("FCC wireless", "FCC wireless", EmailState.FFC_WIRELESS)//TODO
-		;
-		private final String messageEn;
-		private final String messageCs;
-		private final EmailState emailState;
-
-		Warning(String messageEn, String messageCs, EmailState emailState) {
-			this.messageEn = messageEn;
-			this.messageCs = messageCs;
-			this.emailState = emailState;
-		}
-
-		public String getMessageEn() {
-			return messageEn;
-		}
-
-		public String getMessageCs() {
-			return messageCs;
-		}
-
-		public EmailState getEmailState() {
-			return emailState;
-		}
+		LOCAL_PART_IN_DOUBLE_QUOTES
 	}
 
 }

@@ -1,4 +1,4 @@
-package cz.etn.emailvalidator;
+package cz.etn.emailvalidator.enums;
 
 public enum EmailState {
 	/** nemáme informaci o emailové schránce (zatím nedoručeno ani hard bounce) */
@@ -33,5 +33,6 @@ public enum EmailState {
 	/** Email addresses such as sales@, info@ and webmaster@. */
 	ROLE_ACCOUNT,
 	/** Email address originates from an FCC wireless domain. */
-	FFC_WIRELESS;
+	FFC_WIRELESS,
+	TYPO;
 }

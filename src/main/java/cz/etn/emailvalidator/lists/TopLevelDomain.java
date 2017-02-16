@@ -1,4 +1,4 @@
-package cz.etn.emailvalidator;
+package cz.etn.emailvalidator.lists;
 
 		import java.io.ByteArrayOutputStream;
 		import java.io.InputStream;

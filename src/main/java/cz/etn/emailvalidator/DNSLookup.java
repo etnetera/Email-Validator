@@ -1,16 +1,21 @@
 package cz.etn.emailvalidator;
 
-		import java.util.ArrayList;
-		import java.util.List;
-		import java.util.Properties;
+import com.sun.mail.smtp.SMTPTransport;
 
-		import javax.naming.Context;
-		import javax.naming.NamingException;
-		import javax.naming.directory.Attribute;
-		import javax.naming.directory.Attributes;
-		import javax.naming.directory.InitialDirContext;
+import javax.mail.Session;
+import javax.mail.URLName;
+import javax.naming.Context;
+import javax.naming.NamingException;
+import javax.naming.directory.Attribute;
+import javax.naming.directory.Attributes;
+import javax.naming.directory.InitialDirContext;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
-		//import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
 /**
  * http://docs.oracle.com/javase/1.5.0/docs/guide/jndi/jndi-dns.html
@@ -19,10 +24,8 @@ package cz.etn.emailvalidator;
  * https://en.wikipedia.org/wiki/List_of_DNS_record_types
  *
  * @author DDv
- *
  */
 public class DNSLookup {
-	//=============== ATRIBUTY ==================================================
 	private static final String MX_ATTRIB = "MX";
 	private static final String ADDR_ATTRIB_IPV4 = "A";
 	private static final String ADDR_ATTRIB_IPV6 = "AAAA";
@@ -43,10 +46,9 @@ public class DNSLookup {
 		try {
 			idc = new InitialDirContext(env);
 		} catch (NamingException e) {
-		//	Logger.getRootLogger().error("unable to initialize DNS lookup", e);
+			//	Logger.getRootLogger().error("unable to initialize DNS lookup", e);
 		}
 	}
-	//============== KOSTRUKTORY A TOVARNI METODY ===============================
 
 	//============== VEREJNE METODY INSTANCE ====================================
 	public static String getCName(String domain) {
@@ -54,7 +56,7 @@ public class DNSLookup {
 		try {
 			Attributes attrs = idc.getAttributes(domain, CNAME_ATTRIBS);
 			Attribute attr = attrs.get(CNAME_ATTRIB);
-			if(attr != null) {
+			if (attr != null) {
 				for (int i = 0; i < attr.size(); i++) {
 					String cnameAttr = (String) attr.get(i);
 					sb.append(cnameAttr).append("\n");
@@ -68,9 +70,9 @@ public class DNSLookup {
 
 	/**
 	 * https://cs.wikipedia.org/wiki/MX_z%C3%A1znam
+	 *
 	 * @param domain
 	 * @return
-	 * @throws NamingException
 	 */
 	public static List<String> getMXServers(String domain) {
 		List<String> servers = new ArrayList<>();
@@ -89,18 +91,16 @@ public class DNSLookup {
 					servers.add(part);
 				}
 			}
-		} catch(NamingException e) {
-		//	LOG.warn("unable to get MX record for " + domain, e);
+		} catch (NamingException e) {
+			//	LOG.warn("unable to get MX record for " + domain, e);
 		}
 		return servers;
 	}
 
 
 	/**
-	 *
 	 * @param hostname
 	 * @return
-	 * @throws NamingException
 	 */
 	public static List<String> getIPAddresses(String hostname) {
 		List<String> ipAddresses = new ArrayList<>();
@@ -121,15 +121,14 @@ public class DNSLookup {
 					ipAddresses.add((String) ipv6.get(i));
 				}
 			}
-		} catch(NamingException e) {
-		//	LOG.warn("unable to get IP for " + hostname, e);
+		} catch (NamingException e) {
+			//	LOG.warn("unable to get IP for " + hostname, e);
 		}
 		return ipAddresses;
 	}
 
 
 	/**
-	 *
 	 * @param ipAddr
 	 * @return
 	 * @throws NamingException
@@ -157,16 +156,25 @@ public class DNSLookup {
 		return revName;
 	}
 
-
-	//============== SOUKROME METODY INSTANCE ===================================
-
-	//============== VNORENE A VNITRNI TRIDY ====================================
-
-	//============== OSTATNI (MAIN A AUTOMATICKY GENEROVANE METODY) =============
-	public static void main(String[] args) throws Exception {
-		System.out.println(DNSLookup.getIPAddresses("gmail.com"));
-//		System.out.println(DNSLookup.getRevName("178.238.35.108"));
-		System.out.println(DNSLookup.getMXServers("gmail.com"));
-//		System.out.println(DNSLookup.getCName("annonce.cz"));
+	/**
+	 * http://www.serversmtp.com/en/smtp-error
+	 *
+	 * @param mx
+	 * @return smtp code po navazani spojeni jinak null
+	 */
+	private static Integer getMxServerStatus(String mx, int port) {
+		try {
+			Properties mailProps = new Properties();
+			mailProps.put("mail.smtp.host", mx);
+			mailProps.put("mail.host", mx);
+			mailProps.put("mail.smtp.port", String.valueOf(port));
+			SMTPTransport smtp = new SMTPTransport(Session.getInstance(mailProps), new URLName(mx));
+			Socket socket = new Socket(InetAddress.getByName(mx), port);
+			smtp.connect(socket);
+			return smtp.getLastReturnCode();
+		} catch (Exception e) {
+			//LOG.error("unable to check mx server", e);
+		}
+		return null;
 	}
 }

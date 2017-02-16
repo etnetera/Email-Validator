@@ -102,4 +102,254 @@ public class Utils {
 		// the distance is the cost for transforming all letters in both strings
 		return cost[len0 - 1];
 	}
+
+
+	//*******************************************************************************************/
+	//*** detekce znaku **** http://www.ascii.cl/htmlcodes.htm **********************************/
+	//*******************************************************************************************/
+
+	/**
+	 * mezera/space
+	 *
+	 * @param ch
+	 * @return
+	 */
+	public static boolean isSpace(char ch) {
+		return ch == 32;
+	}
+
+	/**
+	 * ! vykricnik ASCII 33
+	 *
+	 * @param ch
+	 * @return
+	 */
+	public static boolean isExclamationPoint(char ch) {
+		return ch == 33;
+	}
+
+	/**
+	 * "
+	 *
+	 * @param ch
+	 * @return
+	 */
+	public static boolean isDoubleQuote(char ch) {
+		return ch == 34;
+	}
+
+	/**
+	 * #
+	 *
+	 * @param ch
+	 * @return
+	 */
+	@SuppressWarnings("unused")
+	public boolean isNumberSign(char ch) {
+		return ch == 35;
+	}
+
+	@SuppressWarnings("unused")
+	public boolean isDollarSign(char ch) {
+		return ch == 36;
+	}
+
+	@SuppressWarnings("unused")
+	public boolean isPercentSign(char ch) {
+		return ch == 37;
+	}
+
+	@SuppressWarnings("unused")
+	public boolean isAmpersand(char ch) {
+		return ch == 38;
+	}
+
+	/**
+	 * (
+	 *
+	 * @param ch
+	 * @return
+	 */
+	public static boolean isOpeningParenthesis(char ch) {
+		return ch == 40;
+	}
+
+	/**
+	 * )
+	 *
+	 * @param ch
+	 * @return
+	 */
+	public static boolean isClosingParenthesis(char ch) {
+		return ch == 41;
+	}
+
+	public static boolean isAsterisk(char ch) {
+		return ch == 42;
+	}
+
+	public static boolean isPlusSign(char ch) {
+		return ch == 43;
+	}
+
+	/**
+	 * ,
+	 *
+	 * @param ch
+	 * @return
+	 */
+	public static boolean isComma(char ch) {
+		return ch == 44;
+	}
+
+	/**
+	 * Character - (minus, hyphen, spojovnik) (ASCII: 45)
+	 *
+	 * @param ch
+	 * @return
+	 */
+	public static boolean isHyphen(char ch) {
+		return ch == 45;
+	}
+
+	/**
+	 * Character . (dot, period, full stop, tecka) (ASCII: 46)
+	 *
+	 * @param ch
+	 * @return
+	 */
+	public static boolean isDot(char ch) {
+		return ch == 46;
+	}
+
+	public static boolean isSlash(char ch) {
+		return ch == 47;
+	}
+
+	/**
+	 * Digits 0 to 9 (ASCII: 48-57)
+	 *
+	 * @param ch
+	 * @return
+	 */
+	public static boolean isNumber(char ch) {
+		return ch >= 48 && ch <= 57;
+	}
+
+	public static boolean isColon(char ch) {
+		return ch == 58;
+	}
+
+	public static boolean isSemicolon(char ch) {
+		return ch == 59;
+	}
+
+	public static boolean isLessThanSign(char ch) {
+		return ch == 60;
+	}
+
+	public static boolean isEqualSign(char ch) {
+		return ch == 61;
+	}
+
+	public static boolean isGreaterThanSign(char ch) {
+		return ch == 62;
+	}
+
+	public static boolean isQuestionMark(char ch) {
+		return ch == 63;
+	}
+
+	public static boolean isAt(char ch) {
+		return ch == 64;
+	}
+
+	/**
+	 * (a-z) (ASCII: 65-90)
+	 *
+	 * @param ch
+	 * @return
+	 */
+	public static boolean isAsciiLowerCaseDigit(char ch) {
+		return ch >= 65 && ch <= 90;
+	}
+
+	public static boolean isOpeningBracket(char ch) {
+		return ch == 91;
+	}
+
+	public static boolean isBackSlash(char ch) {
+		return ch == 92;
+	}
+
+	public static boolean isClosingBracket(char ch) {
+		return ch == 93;
+	}
+
+	/**
+	 * (A-Z) (ASCII: 97-122)
+	 *
+	 * @param ch
+	 * @return
+	 */
+	public static boolean isAsciiUpperCaseDigit(char ch) {
+		return ch >= 97 && ch <= 122;
+	}
+
+	@SuppressWarnings("unused")
+	public boolean isDomainAllowedCharacter(char ch) {
+		return isAsciiDigit(ch) || isNumber(ch) || isDot(ch) || isHyphen(ch);
+	}
+
+	/**
+	 * (a–z, A–Z) (ASCII: 65-90, 97-122)
+	 *
+	 * @param ch
+	 * @return
+	 */
+	public static boolean isAsciiDigit(char ch) {
+		return isAsciiLowerCaseDigit(ch) || isAsciiUpperCaseDigit(ch);
+	}
+
+
+	/**
+	 * Characters !#$%&'*+-/=?^_`{|}~ (ASCII: 33, 35-39, 42, 43, 45, 47, 61, 63, 94-96, 123-126)
+	 *
+	 * @param ch
+	 * @return
+	 */
+	public static boolean isNameSpecialCharacter(char ch) {
+		return isHyphen(ch)//'-'
+				|| isExclamationPoint(ch)//'!'
+				|| (ch >= 35 && ch <= 39)//#$%&' 35-39
+				|| isAsterisk(ch)//'*'
+				|| isPlusSign(ch)//'+'
+				|| isSlash(ch)//'/'
+				|| isEqualSign(ch)//'='
+				|| isQuestionMark(ch)//'?'
+				|| (ch >= 94 && ch <= 96)//^_` 94-96
+				|| (ch >= 123 && ch <= 126);//{|}~ 123-126
+	}
+
+	/**
+	 * space and "(),:;<>@[\]  (ASCII: 34, 40-41, 44, 58-59, 60, 62, 64, 91-93)
+	 *
+	 * @param ch
+	 * @return
+	 */
+	public static boolean isNameQuotedSpecialCharacter(char ch) {
+		return isSpace(ch)
+				|| isOpeningParenthesis(ch)
+				|| isClosingParenthesis(ch)
+				|| isComma(ch)
+				|| isColon(ch)
+				|| isSemicolon(ch)
+				|| isLessThanSign(ch)
+				|| isGreaterThanSign(ch)
+				|| isAt(ch)
+				|| isOpeningBracket(ch)
+				|| isBackSlash(ch)
+				|| isClosingBracket(ch);
+	}
+
 }
