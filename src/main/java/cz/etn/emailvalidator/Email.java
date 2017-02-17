@@ -1,19 +1,13 @@
 package cz.etn.emailvalidator;
 
-import com.sun.mail.smtp.SMTPTransport;
 import cz.etn.emailvalidator.enums.Error;
 import cz.etn.emailvalidator.enums.Warning;
 import cz.etn.emailvalidator.lists.Disposable;
+import cz.etn.emailvalidator.lists.RoleAccounts;
 import cz.etn.emailvalidator.lists.Suggestions;
 import cz.etn.emailvalidator.lists.TopLevelDomain;
 
-import javax.mail.Session;
-import javax.mail.URLName;
-import javax.naming.CommunicationException;
-import javax.naming.NameNotFoundException;
 import javax.naming.NamingException;
-import java.net.InetAddress;
-import java.net.Socket;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -50,146 +44,10 @@ public class Email {
 
 //	private static final List<String> PROHIBITED_LOCAL_PARTS = Arrays.asList("sex");
 
-	private static final List<String> ROLE_ACCOUNT_LOCAL_PARTS = Arrays.asList(
-			"abuse",
-			"admin",
-			"administracion",
-			"administration",
-			"advisor",
-			"all",
-			"billing",
-			"bursar",
-			"busdev",
-			"casting",//povolit
-			"ceo",
-			"co-op",
-			"community",
-			"compete",
-			"compliance",
-			"consultant",
-			"contact",
-			"contacto",
-			"compete",
-			"crew",
-			"customercare",
-			"customerservice",
-			"data",
-			"database",
-			"design",
-			"devnull",
-			"digsitesvalue",
-			"director",
-			"directors",
-			"directory",
-			"dns",
-			"download",
-			"editor",
-			"editorial",
-			"editors",
-			"email",
-			"eng",
-			"enquire",
-			"enquiries",
-			"enquiry",
-			"everyone",
-			"exec",
-			"executive",
-			"executives",
-			"expert",
-			"experts",
-			"export",
-			"fbl",
-			"ftp",
-			"head.office",
-			"head",
-			"headoffice",
-			"headteacher",
-			"hostmaster",
-			"hotel",
-			"hr",//povolit
-			"info",//povolit
-			"information",
-			"informativo",
-			"investorrelations",
-			"inoc",
-			"ispfeedback",
-			"ispsupport",
-			"jobs",//povolit
-			"kontakt",
-			"list-request",
-			"list",
-			"mail",
-			"maildaemon",
-			"manager",
-			"marketing",
-			"master",
-			"media",
-			"noc",
-			"no-reply",
-			"noreply",
-			"null",
-			"office",
-			"officeadmin",
-			"operations",
-			"phish",
-			"phishing",
-			"post",
-			"postbox",
-			"postmaster",
-			"prime",
-			"principal",
-			"privacy",
-			"reception",
-			"recruit",
-			"recruiting",
-			"registrar",
-			"remove",
-			"request",
-			"root",
-			"sales",
-			"security",
-			"secretary",
-			"school",
-			"schooloffice",
-			"shopping",
-			"spam",
-			"support",
-			"sysadmin",
-			"subscribe",
-			"tech",
-			"theoffice",
-			"undisclosed-recipients",
-			"unsubscribe",
-			"usenet",
-			"users",
-			"uucp",
-			"webmaster",
-			"welcome",
-			"www",
-			"internet"
-	);
-
-	static final List<String> ALLOWED_ROLE_ACCOUNT_LOCAL_PARTS = Arrays.asList(
-			"email",
-			"mail",
-			"info",
-			"jobs",
-			"hr",
-			"manager",
-			"director",
-			"office",
-			"sales",
-			"shopping",
-			"casting",
-			"hotel",
-			"kontakt",
-			"contact"
-	);
-
-	private static final List<String> PROHIBITED_ROLE_ACCOUNT_LOCAL_PARTS = new ArrayList<>(ROLE_ACCOUNT_LOCAL_PARTS);
+	private static final List<String> PROHIBITED_ROLE_ACCOUNT_LOCAL_PARTS = new ArrayList<>(RoleAccounts.ROLE_ACCOUNT_LOCAL_PARTS);
 
 	static {
-		PROHIBITED_ROLE_ACCOUNT_LOCAL_PARTS.removeAll(ALLOWED_ROLE_ACCOUNT_LOCAL_PARTS);
+		PROHIBITED_ROLE_ACCOUNT_LOCAL_PARTS.removeAll(RoleAccounts.ALLOWED_ROLE_ACCOUNT_LOCAL_PARTS);
 	}
 
 
@@ -207,7 +65,7 @@ public class Email {
 
 	private String email;
 	private String domain;
-	public List<String> domains;
+	private List<String> domains;
 	private String localPart;
 	private Error error;
 	private List<Warning> warning = new ArrayList<>();
@@ -297,11 +155,7 @@ public class Email {
 		return suggestion;
 	}
 
-
-	/**
-	 *
-	 * @return
-	 *//*
+	/*
 	public boolean isDomainInValidMailServersMap(Context ctx) {
 		if(!parsed) parse();
 		if(VALID_EMAIL_SERVERS_MAP == null) readValidDomains(ctx);
@@ -365,7 +219,7 @@ public class Email {
 	/**
 	 * @return
 	 */
-	public String createSuggestion() {
+	private String createSuggestion() {
 		String localPartSuggestion = localPart;
 		String domainSuggestion = domain;
 
@@ -464,11 +318,11 @@ public class Email {
 			return null;
 	}
 
-	public String getDomainSuggestion() {
+	private String getDomainSuggestion() {
 		return getDomainSuggestion(this.domain);
 	}
 
-	public static String checkDomain(String domain) {
+	/*public static String checkDomain(String domain) {
 		try {
 			List<String> mx = DNSLookup.getMXServers(domain);
 			List<String> ip = DNSLookup.getIPAddresses(domain);
@@ -507,7 +361,7 @@ public class Email {
 			sb.append(Utils.exceptionToString(e)).append("\n");
 		}
 		return sb.toString();
-	}
+	}*/
 
 	//============== SOUKROME METODY INSTANCE ===================================
 	private static void readValidDomains() {

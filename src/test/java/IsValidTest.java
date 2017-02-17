@@ -1,8 +1,15 @@
 import cz.etn.emailvalidator.Email;
 import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -77,5 +84,43 @@ public class IsValidTest {
 				Arrays.asList(invalidEmails).iterator(),
 				email -> "Testing " + email,
 				email -> assertNotNull(new Email(email).getError()));
+	}
+
+	@Test
+	void testReal() {
+		//String csvFile = "/home/tomaspavel/Plocha/fortuna_data_cz_FORUM_USER.csv";
+		//String csvFile = "/home/tomaspavel/Plocha/fortuna_data_sk_FORUM_USER.csv";
+		String csvFile = "/home/tomaspavel/Plocha/fortuna_data_pl_FORUM_USER.csv";
+		String line;
+		String cvsSplitBy = ",";
+		List<String> emails = new ArrayList<>();
+		int count = 0;
+
+		try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+			while ((line = br.readLine()) != null && count <= 500_000) {
+				String[] user = line.split(cvsSplitBy);
+				String email = user[2];
+				if (email != null && !email.isEmpty()) {
+					emails.add(email);
+				}
+				count++;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		int i = 1;
+		int bad = 0;
+		for (String e : emails) {
+			Email val = new Email(e);
+			String error = val.getError() != null ? val.getError().toString() : null;
+			if (error != null) {
+				System.out.println(i  + " " + error + " " + val.getEmail() );
+				bad++;
+			}
+			i++;
+		}
+		System.err.println("Bad emails: " + bad);
+
 	}
 }

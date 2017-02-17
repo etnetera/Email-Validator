@@ -115,7 +115,8 @@ public class Suggestions {
 			"gmial.com",//	MX: [MAIL.B-IO.CO.]								IP: []
 			"cmail.cz",//	MX: [cax.virusfree.cz., ccx.spamfree.cz., cbx.virusfree.cz., cdx.spamfree.cz.]		IP: []
 			"qmail.cz",//	MX: [smail2.qmail.cz., smail.qmail.cz.]			IP: []
-			"gaimil.com"//	MX: [mail.post-host.net.]						IP: []
+			"gaimil.com",//	MX: [mail.post-host.net.]						IP: []
+			"gmail.con"
 	));
 
 }
