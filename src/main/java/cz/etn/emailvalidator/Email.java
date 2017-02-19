@@ -29,7 +29,7 @@ import java.util.Map.Entry;
  * o Space and "(),:;<>@[] (ASCII: 32, 34, 40, 41, 44, 58, 59, 60, 62, 64, 91-93)
  * The restrictions for special characters are that they must only be used when contained between quotation marks, and that 3 of them (The space, backslash \ and quotation mark " (ASCII: 32, 92, 34)) must also be preceded by a backslash \ (e.g. "\ \\"").
  *
- * @author dvorak
+ * @author DDv, TPa
  */
 @SuppressWarnings("JavaDoc")
 public class Email {
@@ -65,7 +65,6 @@ public class Email {
 	//private static final Logger LOG = Logger.getRootLogger();
 
 
-
 	private String email;
 	private String domain;
 	private List<String> domains;
@@ -85,14 +84,14 @@ public class Email {
 	//============== VEREJNE METODY INSTANCE ====================================
 
 	/**
-	 * @return
+	 * @return cely email
 	 */
 	public String getEmail() {
 		return email;
 	}
 
 	/**
-	 * @return
+	 * @return cast emailu pred @
 	 */
 	public String getLocalPart() {
 		if (!this.parsed) parse();
@@ -101,7 +100,7 @@ public class Email {
 	}
 
 	/**
-	 * @return
+	 * @return domena za @
 	 */
 	public String getDomain() {
 		if (!this.parsed) parse();
@@ -109,7 +108,7 @@ public class Email {
 	}
 
 	/**
-	 * @return
+	 * Vraci zda je validni syntax emailu dle RFC a zda ma domena IP adresu. U vybranych domen neni provadeno overeni IP. (readValidDomains())
 	 */
 	public boolean isValid() {
 		if (!this.parsed) parse();
@@ -123,7 +122,7 @@ public class Email {
 			this.warning.add(Warning.TYPO);
 		}
 
-		if(isDomainInValidMailServersMap()) { //domena je v seznamu jiz uspesne dorucenych mail serveru
+		if (isDomainInValidMailServersMap()) { //domena je v seznamu jiz uspesne dorucenych mail serveru
 			return true;
 		}
 
@@ -139,17 +138,11 @@ public class Email {
 		return true;
 	}
 
-	/**
-	 * @return
-	 */
 	public Error getError() {
 		if (!parsed) parse();
 		return error;
 	}
 
-	/**
-	 * @return
-	 */
 	public List<Warning> getWarnings() {
 		if (!parsed) parse();
 		return warning;
@@ -206,9 +199,6 @@ public class Email {
 		return this.mxServers;
 	}
 
-	/**
-	 *
-	 */
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
@@ -221,7 +211,9 @@ public class Email {
 
 
 	/**
-	 * @return
+	 * Metoda se pokusi najit a opravit mozne preklepy v emailu.
+	 *
+	 * @return opraveny email
 	 */
 	private String createSuggestion() {
 		String localPartSuggestion = localPart;
@@ -290,9 +282,6 @@ public class Email {
 	}
 
 
-	/**
-	 * @return
-	 */
 	private String getDomainSuggestion(String domain) {
 		if (!parsed) parse();
 		if (domain == null || domain.length() == 0)
@@ -367,6 +356,9 @@ public class Email {
 		return sb.toString();
 	}*/
 
+	/**
+	 * @return true pokud je domena emailu v seznamu overenych emailu
+	 */
 	public boolean isDomainInValidMailServersMap() {
 		if (!this.parsed) parse();
 		if (VALID_EMAIL_SERVERS_MAP == null) {
@@ -375,7 +367,9 @@ public class Email {
 		return VALID_EMAIL_SERVERS_MAP.contains(this.domain);
 	}
 
-	//============== SOUKROME METODY INSTANCE ===================================
+	/**
+	 * Metoda vytvori seznam overenych domen, u kterych predpokladame uspesne doruceni emailu
+	 */
 	public static void readValidDomains() {
 		VALID_EMAIL_SERVERS_MAP = new HashSet<>();
 		VALID_EMAIL_SERVERS_MAP.add("seznam.cz");
@@ -400,9 +394,6 @@ public class Email {
 	}
 
 
-	/**
-	 *
-	 */
 	private void parse() {
 		this.parsed = true;
 		StringBuilder sb = new StringBuilder();
@@ -420,8 +411,7 @@ public class Email {
 				if (part == EmailPart.DOMAIN) {
 					sb.append(ch);
 					addError(Error.MULTIPLE_AT);
-					if (part == EmailPart.DOMAIN)
-						domainStr.append(ch);
+					domainStr.append(ch);
 				} else if (part == EmailPart.LOCAL_PART_IN_DOUBLE_QUOTES) {//jsme v uvozovkach
 					sb.append(ch);
 				} else if (part == EmailPart.LOCAL_PART) {//konec local part
@@ -460,8 +450,7 @@ public class Email {
 				sb.append(ch);
 				if (part == EmailPart.DOMAIN) {//nepovoleno v domene
 					addError(Error.BAD_CHARACTER);
-					if (part == EmailPart.DOMAIN)
-						domainStr.append(ch);
+					domainStr.append(ch);
 				} else {//v local partu povoleno
 					/*
 					 * A quoted string may exist as a dot separated entity within the local-part,
@@ -577,9 +566,6 @@ public class Email {
 		this.suggestion = createSuggestion();
 	}
 
-	/**
-	 * @param error
-	 */
 	private void addError(Error error) {
 		if (error == null)
 			return;

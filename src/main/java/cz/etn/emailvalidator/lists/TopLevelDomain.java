@@ -1,14 +1,16 @@
 package cz.etn.emailvalidator.lists;
 
-		import java.io.ByteArrayOutputStream;
-		import java.io.InputStream;
-		import java.net.URL;
-		import java.net.URLConnection;
-		import java.util.*;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Scanner;
+import java.util.Set;
 
 
 /**
- *
  * http://www.iana.org/domains/root/db
  * http://data.iana.org/TLD/tlds-alpha-by-domain.txt
  * https://en.wikipedia.org/wiki/List_of_Internet_top-level_domains
@@ -17,7 +19,6 @@ package cz.etn.emailvalidator.lists;
  * http://www.statdns.com/cctlds/
  *
  * @author DDv
- *
  */
 public class TopLevelDomain {
 
@@ -3170,7 +3171,6 @@ public class TopLevelDomain {
 		UNKNOWN;
 	}
 
-	
 
 	//============== OSTATNI (MAIN A AUTOMATICKY GENEROVANE METODY) =============
 	private static void check() throws Exception {
@@ -3189,9 +3189,9 @@ public class TopLevelDomain {
 
 		int missingCnt = 0;
 		Scanner scanner = new Scanner(body);
-		while(scanner.hasNext()) {
+		while (scanner.hasNext()) {
 			String line = scanner.nextLine();
-			if(!line.startsWith("#")) {
+			if (!line.startsWith("#")) {
 				//if(!MAP.containsKey(line.toLowerCase())) {
 				if (!domains.contains(line.toLowerCase())) {
 					//System.out.println("{\"" + line.toLowerCase() + "\", new TopLevelDomain(\"" + line.toLowerCase() + "\", Type.UNKNOWN, null)},");

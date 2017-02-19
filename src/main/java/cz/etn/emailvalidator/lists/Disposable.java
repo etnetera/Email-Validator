@@ -1331,9 +1331,9 @@ public class Disposable {
 
 		int missingCnt = 0;
 		Scanner scanner = new Scanner(body);
-		while(scanner.hasNext()) {
+		while (scanner.hasNext()) {
 			String line = scanner.nextLine();
-			if(!line.startsWith("#")) {
+			if (!line.startsWith("#")) {
 				//if(!MAP.containsKey(line.toLowerCase())) {
 				if (!disposableList.contains(line.toLowerCase())) {
 					//System.out.println("{\"" + line.toLowerCase() + "\", new TopLevelDomain(\"" + line.toLowerCase() + "\", Type.UNKNOWN, null)},");

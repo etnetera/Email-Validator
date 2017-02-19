@@ -52,7 +52,9 @@ public enum Warning {
 	 * Email address originates from an FCC wireless domain.
 	 */
 	FFC_WIRELESS("FCC wireless", "FCC wireless", EmailState.FFC_WIRELESS),//TODO
-
+	/**
+	 * Email pravdepodobne obsahuje preklep
+	 */
 	TYPO("typo", "typo", EmailState.TYPO);
 
 	private final String messageEn;

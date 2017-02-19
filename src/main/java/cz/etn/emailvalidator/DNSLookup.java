@@ -33,7 +33,7 @@ public class DNSLookup {
 	private static final String CNAME_ATTRIB = "CNAME";
 	private static String[] MX_ATTRIBS = {MX_ATTRIB};
 	private static String[] ADDR_ATTRIBS = {ADDR_ATTRIB_IPV4, ADDR_ATTRIB_IPV6};
-	private static String[] PTR_ATTRIBS = {PTR_ATTRIB};
+	//private static String[] PTR_ATTRIBS = {PTR_ATTRIB};
 	private static String[] CNAME_ATTRIBS = {CNAME_ATTRIB};
 
 	//private static final Logger LOG = Logger.getRootLogger();
@@ -71,8 +71,7 @@ public class DNSLookup {
 	/**
 	 * https://cs.wikipedia.org/wiki/MX_z%C3%A1znam
 	 *
-	 * @param domain
-	 * @return
+	 * @return seznam mx zaznamu pro domenu
 	 */
 	public static List<String> getMXServers(String domain) {
 		List<String> servers = new ArrayList<>();
@@ -99,8 +98,7 @@ public class DNSLookup {
 
 
 	/**
-	 * @param hostname
-	 * @return
+	 * @return seznam ip adres pro domenu vyhledanych z DNS
 	 */
 	public static List<String> getIPAddresses(String hostname) {
 		List<String> ipAddresses = new ArrayList<>();
@@ -128,11 +126,7 @@ public class DNSLookup {
 	}
 
 
-	/**
-	 * @param ipAddr
-	 * @return
-	 * @throws NamingException
-	 */
+/*
 	public static String getRevName(String ipAddr) throws NamingException {
 
 		String revName = null;
@@ -154,12 +148,12 @@ public class DNSLookup {
 		}
 
 		return revName;
-	}
+	}*/
 
 	/**
 	 * http://www.serversmtp.com/en/smtp-error
 	 *
-	 * @param mx
+	 * @param mx adresa mx serveru, na ktery se pokusime pripojit
 	 * @return smtp code po navazani spojeni jinak null
 	 */
 	private static Integer getMxServerStatus(String mx, int port) {

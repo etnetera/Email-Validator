@@ -52,4 +52,14 @@ public class UseTest {
 		assertFalse(isValid);
 		assertEquals(Error.BAD_CHARACTER, email.getError());
 	}
+
+	@Test
+	void missingAtTest() {
+		Email email = new Email("karelgmail.com");
+		boolean isValid = email.isValid();
+		assertEquals(Error.MISSING_AT, email.getError());
+		assertFalse(isValid);
+		String sugestion = email.getSuggestion();
+		assertEquals("karel@gmail.com", sugestion);
+	}
 }
