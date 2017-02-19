@@ -29,4 +29,10 @@ public class LookupTest {
 		email = new Email("karel@nejakablbost.cz");
 		assertFalse(email.hasMXRecord());
 	}
+
+	@Test
+	void validTest() {
+		Email email = new Email("test@gmail.com");
+		assertTrue(email.isDomainInValidMailServersMap());
+	}
 }

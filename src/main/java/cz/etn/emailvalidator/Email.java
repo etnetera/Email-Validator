@@ -34,13 +34,16 @@ import java.util.Map.Entry;
 @SuppressWarnings("JavaDoc")
 public class Email {
 	//=============== ATRIBUTY ==================================================
-	//The format of email addresses is local-part@domain where the local part may be up to 64 characters long and the domain may have a maximum of 255 characters[2]—but the maximum of 256-character length of a forward or reverse path restricts the entire email address to be no more than 254 characters long.
+	//The format of email addresses is local-part@domain where the local part may be up to 64 characters long and the domain
+	// may have a maximum of 255 characters[2]—but the maximum of 256-character length of a forward or reverse path restricts
+	// the entire email address to be no more than 254 characters long.
 	private static final int MAX_LOCAL_PART_LENGTH = 64;
 	private static final int MAX_DOMAIN_LENGTH = 255;
 	private static final int MAX_LENGTH = 254;
 	public static final int SMTP_PORT = 25;
 	public static final int SMTP_SSL_PORT = 465;
 
+	private static Set<String> VALID_EMAIL_SERVERS_MAP;
 
 //	private static final List<String> PROHIBITED_LOCAL_PARTS = Arrays.asList("sex");
 
@@ -61,7 +64,7 @@ public class Email {
 
 	//private static final Logger LOG = Logger.getRootLogger();
 
-	private static Set<String> VALID_EMAIL_SERVERS_MAP;
+
 
 	private String email;
 	private String domain;
@@ -120,8 +123,9 @@ public class Email {
 			this.warning.add(Warning.TYPO);
 		}
 
-		/*if(isDomainInValidMailServersMap(ctx))//domena je v seznamu jiz uspesne dorucenych mail serveru
-			return true;*/
+		if(isDomainInValidMailServersMap()) { //domena je v seznamu jiz uspesne dorucenych mail serveru
+			return true;
+		}
 
 		if (!isValidDomain()) {//je domena platna(existuje)???
 			this.warning.add(Warning.BAD_DOMAIN);
@@ -363,9 +367,25 @@ public class Email {
 		return sb.toString();
 	}*/
 
+	public boolean isDomainInValidMailServersMap() {
+		if (!this.parsed) parse();
+		if (VALID_EMAIL_SERVERS_MAP == null) {
+			readValidDomains();
+		}
+		return VALID_EMAIL_SERVERS_MAP.contains(this.domain);
+	}
+
 	//============== SOUKROME METODY INSTANCE ===================================
-	private static void readValidDomains() {
+	public static void readValidDomains() {
 		VALID_EMAIL_SERVERS_MAP = new HashSet<>();
+		VALID_EMAIL_SERVERS_MAP.add("seznam.cz");
+		VALID_EMAIL_SERVERS_MAP.add("gmail.com");
+		VALID_EMAIL_SERVERS_MAP.add("email.cz");
+		VALID_EMAIL_SERVERS_MAP.add("me.com");
+		VALID_EMAIL_SERVERS_MAP.add("azet.sk");
+		VALID_EMAIL_SERVERS_MAP.add("zoznam.sk");
+		VALID_EMAIL_SERVERS_MAP.add("wp.pl");
+		VALID_EMAIL_SERVERS_MAP.add("interia.pl");
 	}
 
 	private static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
