@@ -108,9 +108,16 @@ public class Email {
 	}
 
 	/**
-	 * Vraci zda je validni syntax emailu dle RFC a zda ma domena IP adresu. U vybranych domen neni provadeno overeni IP. (readValidDomains())
+	 * Vraci zda je validni syntax emailu dle RFC.
 	 */
 	public boolean isValid() {
+		return isValid(false);
+	}
+
+	/**
+	 * Vraci zda je validni syntax emailu dle RFC a zda ma domena IP adresu+MX zaznam. U vybranych domen neni provadeno overeni IP. (readValidDomains())
+	 */
+	public boolean isValid(boolean checkDNS) {
 		if (!this.parsed) parse();
 		if (this.error != null)//existuji errory
 			return false;
@@ -126,9 +133,15 @@ public class Email {
 			return true;
 		}
 
-		if (!isValidDomain()) {//je domena platna(existuje)???
-			this.warning.add(Warning.BAD_DOMAIN);
-			return false;
+		if (checkDNS) {
+			if (!isValidDomain()) {//je domena platna(existuje)???
+				this.warning.add(Warning.BAD_DOMAIN);
+				return false;
+			}
+			if (!hasMXRecord()) {
+				this.warning.add(Warning.BAD_DOMAIN);
+				return false;
+			}
 		}
 
 		if (Disposable.isDisposable(this.domain)) {
