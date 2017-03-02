@@ -1553,6 +1553,8 @@ public class TopLevelDomain {
 		domains.add("zone");
 		domains.add("zuerich");
 		domains.add("zw");
+		domains.add("africa");
+		domains.add("xn--mgbai9azgqp6j");
 	}
 
 	/*private static final Map<String, TopLevelDomain> MAP = Utils.toMap(new Object[][] {

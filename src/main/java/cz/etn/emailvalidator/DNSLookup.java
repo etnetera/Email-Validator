@@ -38,22 +38,17 @@ public class DNSLookup {
 
 	//private static final Logger LOG = Logger.getRootLogger();
 
-	private static InitialDirContext idc;
+	private static final Properties env = new Properties();
 
 	static {
-		Properties env = new Properties();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.dns.DnsContextFactory");
-		try {
-			idc = new InitialDirContext(env);
-		} catch (NamingException e) {
-			//	Logger.getRootLogger().error("unable to initialize DNS lookup", e);
-		}
 	}
 
 	//============== VEREJNE METODY INSTANCE ====================================
 	public static String getCName(String domain) {
 		StringBuilder sb = new StringBuilder();
 		try {
+			InitialDirContext idc = new InitialDirContext(env);
 			Attributes attrs = idc.getAttributes(domain, CNAME_ATTRIBS);
 			Attribute attr = attrs.get(CNAME_ATTRIB);
 			if (attr != null) {
@@ -76,6 +71,7 @@ public class DNSLookup {
 	public static List<String> getMXServers(String domain) {
 		List<String> servers = new ArrayList<>();
 		try {
+			InitialDirContext idc = new InitialDirContext(env);
 			Attributes attrs = idc.getAttributes(domain, MX_ATTRIBS);
 			Attribute attr = attrs.get(MX_ATTRIB);
 
@@ -103,6 +99,7 @@ public class DNSLookup {
 	public static List<String> getIPAddresses(String hostname) {
 		List<String> ipAddresses = new ArrayList<>();
 		try {
+			InitialDirContext idc = new InitialDirContext(env);
 			Attributes attrs = idc.getAttributes(hostname, ADDR_ATTRIBS);
 			Attribute ipv4 = attrs.get(ADDR_ATTRIB_IPV4);
 			Attribute ipv6 = attrs.get(ADDR_ATTRIB_IPV6);

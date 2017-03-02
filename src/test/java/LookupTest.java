@@ -17,6 +17,9 @@ public class LookupTest {
 		List<String> ips = DNSLookup.getIPAddresses("seznam.cz");
 		assertFalse(ips.isEmpty());
 
+		ips = DNSLookup.getIPAddresses("alza.cz");
+		assertFalse(ips.isEmpty());
+
 		ips = DNSLookup.getIPAddresses("nejakablbost.cz");
 		assertTrue(ips.isEmpty());
 	}
@@ -24,6 +27,9 @@ public class LookupTest {
 	@Test
 	void mxLookupTest() {
 		Email email = new Email("karel@seznam.cz");
+		assertTrue(email.hasMXRecord());
+
+		email = new Email("karel@alza.cz");
 		assertTrue(email.hasMXRecord());
 
 		email = new Email("karel@nejakablbost.cz");
