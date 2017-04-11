@@ -1,5 +1,5 @@
 group 'cz.etn'
-version '1.0.0'
+version '1.0.1'
 ext.libs_shared =//store/install/Java/tomcat/lib/_gradle
 
         task wrapper(type: Wrapper) {
