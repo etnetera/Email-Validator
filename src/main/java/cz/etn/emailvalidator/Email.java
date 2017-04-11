@@ -409,6 +409,10 @@ public class Email {
 
 	private void parse() {
 		this.parsed = true;
+		if (this.email == null) {
+			addError(Error.CONTAINS_MULTIPLE_TYPOS);
+			return;
+		}
 		StringBuilder sb = new StringBuilder();
 		StringBuilder domainStr = new StringBuilder();
 		this.domains = new ArrayList<>();

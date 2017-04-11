@@ -62,4 +62,18 @@ public class UseTest {
 		String sugestion = email.getSuggestion();
 		assertEquals("karel@gmail.com", sugestion);
 	}
+
+	@Test
+	void nullTest() {
+		Email email = new Email(null);
+		boolean isValid = email.isValid();
+		assertFalse(isValid);
+	}
+
+	@Test
+	void emptyTest() {
+		Email email = new Email("");
+		boolean isValid = email.isValid();
+		assertFalse(isValid);
+	}
 }

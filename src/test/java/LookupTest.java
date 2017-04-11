@@ -20,6 +20,9 @@ public class LookupTest {
 		ips = DNSLookup.getIPAddresses("alza.cz");
 		assertFalse(ips.isEmpty());
 
+		ips = DNSLookup.getIPAddresses("www.alza.cz");
+		assertFalse(ips.isEmpty());
+
 		ips = DNSLookup.getIPAddresses("nejakablbost.cz");
 		assertTrue(ips.isEmpty());
 	}
