@@ -119,4 +119,9 @@ public class Suggestions {
 			"gmail.con"
 	));
 
+	public static final Set<String> IGNORED = new HashSet<>(Arrays.asList(
+			"op.pl",
+			"mail.ru"
+	));
+
 }

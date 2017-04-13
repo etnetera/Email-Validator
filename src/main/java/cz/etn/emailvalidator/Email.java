@@ -300,6 +300,9 @@ public class Email {
 		if (domain == null || domain.length() == 0)
 			return null;
 
+		if (Suggestions.IGNORED.contains(domain))
+			return null;
+
 		if (Suggestions.DOMAIN_TYPING_ERRORS.containsKey(domain))
 			return Suggestions.DOMAIN_TYPING_ERRORS.get(domain);
 
