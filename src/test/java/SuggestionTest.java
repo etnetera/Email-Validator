@@ -18,6 +18,7 @@ public class SuggestionTest {
 	static {
 		testData.add(new TestData("op.pl", null));
 		testData.add(new TestData("mail.ru", null));
+		testData.add(new TestData("o2.pl", null));
 		testData.add(new TestData("gnail.com", PREFIX + "gmail.com"));
 		testData.add(new TestData("seznma.cz", PREFIX + "seznam.cz"));
 	}
