@@ -27,7 +27,17 @@ dependencies {
     compile group: 'javax.mail', name: 'javax.mail-api', version: '1.5.6'
     compile group: 'com.sun.mail', name: 'smtp', version: '1.5.6'
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.0.0-M3'
+    testCompile group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.0.0-RC3'
 }
 
-
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'Gradle Jar File Example',
+                'Implementation-Version': version,
+                'Main-Class': 'cz.etn.emailvalidator.ServerTest'
+    }
+    baseName = "test"
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
 

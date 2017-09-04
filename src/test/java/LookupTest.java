@@ -37,6 +37,12 @@ public class LookupTest {
 
 		email = new Email("karel@nejakablbost.cz");
 		assertFalse(email.hasMXRecord());
+
+		email = new Email("karel@etnetera.cz");
+		assertFalse(email.hasMXRecord());
+
+		email = new Email("karel@site.cz");
+		assertFalse(email.hasMXRecord());
 	}
 
 	@Test

@@ -1555,6 +1555,25 @@ public class TopLevelDomain {
 		domains.add("zw");
 		domains.add("africa");
 		domains.add("xn--mgbai9azgqp6j");
+		domains.add("arab");
+		domains.add("etisalat");
+		domains.add("grocery");
+		domains.add("hotels");
+		domains.add("map");
+		domains.add("merckmsd");
+		domains.add("phd");
+		domains.add("rugby");
+		domains.add("search");
+		domains.add("xn--2scrj9c");
+		domains.add("xn--3hcrj9c");
+		domains.add("xn--45br5cyl");
+		domains.add("xn--h2breg3eve");
+		domains.add("xn--h2brj9c8c");
+		domains.add("xn--mgbaakc7dvf");
+		domains.add("xn--mgbbh1a");
+		domains.add("xn--mgbgu82a");
+		domains.add("xn--ngbrx");
+		domains.add("xn--rvc1e0am3e");
 	}
 
 	/*private static final Map<String, TopLevelDomain> MAP = Utils.toMap(new Object[][] {
