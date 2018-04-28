@@ -7,7 +7,6 @@ import cz.etn.emailvalidator.lists.RoleAccounts;
 import cz.etn.emailvalidator.lists.Suggestions;
 import cz.etn.emailvalidator.lists.TopLevelDomain;
 
-import javax.naming.NamingException;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -31,9 +30,7 @@ import java.util.Map.Entry;
  *
  * @author DDv, TPa
  */
-@SuppressWarnings("JavaDoc")
 public class Email {
-	//=============== ATRIBUTY ==================================================
 	//The format of email addresses is local-part@domain where the local part may be up to 64 characters long and the domain
 	// may have a maximum of 255 characters[2]—but the maximum of 256-character length of a forward or reverse path restricts
 	// the entire email address to be no more than 254 characters long.
@@ -44,8 +41,6 @@ public class Email {
 	public static final int SMTP_SSL_PORT = 465;
 
 	private static Set<String> VALID_EMAIL_SERVERS_MAP;
-
-//	private static final List<String> PROHIBITED_LOCAL_PARTS = Arrays.asList("sex");
 
 	private static final List<String> PROHIBITED_ROLE_ACCOUNT_LOCAL_PARTS = new ArrayList<>(RoleAccounts.ROLE_ACCOUNT_LOCAL_PARTS);
 
@@ -76,22 +71,20 @@ public class Email {
 	private List<String> mxServers;
 	private String suggestion;
 
-	//============== KOSTRUKTORY A TOVARNI METODY ===============================
 	public Email(String email) {
 		this.email = email;
 	}
 
-	//============== VEREJNE METODY INSTANCE ====================================
 
 	/**
-	 * @return cely email
+	 * @return whole email
 	 */
 	public String getEmail() {
 		return email;
 	}
 
 	/**
-	 * @return cast emailu pred @
+	 * @return part of email before @
 	 */
 	public String getLocalPart() {
 		if (!this.parsed) parse();
@@ -100,7 +93,7 @@ public class Email {
 	}
 
 	/**
-	 * @return domena za @
+	 * @return domain after @
 	 */
 	public String getDomain() {
 		if (!this.parsed) parse();
@@ -108,14 +101,14 @@ public class Email {
 	}
 
 	/**
-	 * Vraci zda je validni syntax emailu dle RFC.
+	 * @return true if the emeil is valid according to RFC 5322
 	 */
 	public boolean isValid() {
 		return isValid(false);
 	}
 
 	/**
-	 * Vraci zda je validni syntax emailu dle RFC a zda ma domena IP adresu+MX zaznam. U vybranych domen neni provadeno overeni IP. (readValidDomains())
+	 * @return true if the emeil is valid according to RFC 5322 and also check IP adress and MX record
 	 */
 	public boolean isValid(boolean checkDNS) {
 		if (!this.parsed) parse();
@@ -189,7 +182,6 @@ public class Email {
 
 	/**
 	 * @return
-	 * @throws NamingException
 	 */
 	public boolean hasMXRecord() {
 		if (!parsed) parse();
@@ -201,7 +193,7 @@ public class Email {
 	}
 
 	/**
-	 * @return
+	 * @return MX record for domain
 	 */
 	public List<String> getMXRecord() {
 		if (!parsed) parse();
@@ -224,9 +216,9 @@ public class Email {
 
 
 	/**
-	 * Metoda se pokusi najit a opravit mozne preklepy v emailu.
+	 * Method tries to correct typos in email
 	 *
-	 * @return opraveny email
+	 * @return fixed email
 	 */
 	private String createSuggestion() {
 		String localPartSuggestion = localPart;
@@ -297,7 +289,7 @@ public class Email {
 
 	private String getDomainSuggestion(String domain) {
 		if (!parsed) parse();
-		if (domain == null || domain.length() == 0)
+		if (domain == null || domain.isEmpty())
 			return null;
 
 		if (Suggestions.IGNORED.contains(domain))
@@ -604,8 +596,6 @@ public class Email {
 			this.error = error;
 	}
 
-
-	//============== VNORENE A VNITRNI TRIDY ====================================
 
 	/**
 	 * @author DDv

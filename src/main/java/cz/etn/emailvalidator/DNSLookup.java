@@ -1,6 +1,7 @@
 package cz.etn.emailvalidator;
 
 import com.sun.mail.smtp.SMTPTransport;
+import org.jetbrains.annotations.Nullable;
 
 import javax.mail.Session;
 import javax.mail.URLName;
@@ -64,9 +65,7 @@ public class DNSLookup {
 	}
 
 	/**
-	 * https://cs.wikipedia.org/wiki/MX_z%C3%A1znam
-	 *
-	 * @return seznam mx zaznamu pro domenu
+	 * @return list of mx records for domain
 	 */
 	public static List<String> getMXServers(String domain) {
 		List<String> servers = new ArrayList<>();
@@ -94,7 +93,7 @@ public class DNSLookup {
 
 
 	/**
-	 * @return seznam ip adres pro domenu vyhledanych z DNS
+	 * @return list of IP adresses for domain
 	 */
 	public static List<String> getIPAddresses(String hostname) {
 		List<String> ipAddresses = new ArrayList<>();
@@ -153,6 +152,7 @@ public class DNSLookup {
 	 * @param mx adresa mx serveru, na ktery se pokusime pripojit
 	 * @return smtp code po navazani spojeni jinak null
 	 */
+	@Nullable
 	private static Integer getMxServerStatus(String mx, int port) {
 		try {
 			Properties mailProps = new Properties();

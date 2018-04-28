@@ -13,7 +13,7 @@ import java.util.Set;
 public class Suggestions {
 
 	/**
-	 * domeny, ktere maji svou IP ale nemaji MX zaznam a jsou na prilakani navstevnosti
+	 * domains with IP adress but without MX record.
 	 */
 	public static final Map<String, String> DOMAIN_TYPING_ERRORS = Utils.toMap(new Object[][]{
 			//yahoo.com
@@ -119,7 +119,6 @@ public class Suggestions {
 			"gmail.con"
 	));
 
-	//TODO: nacitat z DB nebo odjinud
 	public static final Set<String> IGNORED = new HashSet<>(Arrays.asList(
 			"op.pl",
 			"mail.ru",

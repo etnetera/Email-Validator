@@ -86,41 +86,4 @@ public class IsValidTest {
 				email -> assertNotNull(new Email(email).getError()));
 	}
 
-	@Test
-	void testReal() {
-		//String csvFile = "/home/tomaspavel/Plocha/fortuna_data_cz_FORUM_USER.csv";
-		//String csvFile = "/home/tomaspavel/Plocha/fortuna_data_sk_FORUM_USER.csv";
-		String csvFile = "/home/tomaspavel/Plocha/fortuna_data_pl_FORUM_USER.csv";
-		String line;
-		String cvsSplitBy = ",";
-		List<String> emails = new ArrayList<>();
-		int count = 0;
-
-		try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
-			while ((line = br.readLine()) != null && count <= 500_000) {
-				String[] user = line.split(cvsSplitBy);
-				String email = user[2];
-				if (email != null && !email.isEmpty()) {
-					emails.add(email);
-				}
-				count++;
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		int i = 1;
-		int bad = 0;
-		for (String e : emails) {
-			Email val = new Email(e);
-			String error = val.getError() != null ? val.getError().toString() : null;
-			if (error != null) {
-				System.out.println(i  + " " + error + " " + val.getEmail() );
-				bad++;
-			}
-			i++;
-		}
-		System.err.println("Bad emails: " + bad);
-
-	}
 }

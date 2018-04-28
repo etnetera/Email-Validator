@@ -1,15 +1,6 @@
 package cz.etn.emailvalidator.enums;
 
 public enum EmailState {
-	/** nemáme informaci o emailové schránce (zatím nedoručeno ani hard bounce) */
-	UNCONFIRMED,
-	/** podařilo se odeslat email na danou adresu */
-	VALID,
-	/** nepodařilo se odeslat - hard bounce - většinou emailová schránka neexistuje */
-	INVALID,
-	/** nepodařilo se odeslat - soft bounce - cílový server oznámil plnou schránku uživatele */
-	MAILBOX_FULL,
-	//stavy dle FreshAddress
 	/** Email address with a restricted handle and/or domain which is a likely suspect for being a fake or undesirable entry. */
 	BOGUS,
 	/** Email address is associated with a domain with inactive mail servers. */
@@ -34,5 +25,5 @@ public enum EmailState {
 	ROLE_ACCOUNT,
 	/** Email address originates from an FCC wireless domain. */
 	FFC_WIRELESS,
-	TYPO;
+	TYPO
 }

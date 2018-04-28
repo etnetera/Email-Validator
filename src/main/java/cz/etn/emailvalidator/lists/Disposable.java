@@ -1307,7 +1307,16 @@ public class Disposable {
 			"eml.pp.ua",
 			"stop-my-spam.pp.ua",
 			"ass.pp.ua",
-			"lackmail.ru"
+			"lackmail.ru",
+			"housat.com",
+			"2storage.com",
+			"gamgling.com",
+			"cheaphub.net",
+			"lillemap.net",
+			"gafy.net",
+			"evyush.com",
+			"vps911.net",
+			"katztube.com"
 	);
 
 
