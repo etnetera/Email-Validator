@@ -39,7 +39,7 @@ public class LookupTest {
 		assertFalse(email.hasMXRecord());
 
 		email = new Email("karel@etnetera.cz");
-		assertFalse(email.hasMXRecord());
+		assertTrue(email.hasMXRecord());
 
 		email = new Email("karel@site.cz");
 		assertFalse(email.hasMXRecord());
