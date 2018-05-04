@@ -6,12 +6,19 @@
 
     <groupId>cz.etn</groupId>
     <artifactId>email-validator</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.3</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
+
+    <distributionManagement>
+        <repository>
+            <id>bintray-etn</id>
+            <url>https://api.bintray.com/maven/tpavel-etn/Email-Validator/Email-Validator/;publish=1</url>
+        </repository>
+    </distributionManagement>
 
     <dependencies>
         <dependency>
