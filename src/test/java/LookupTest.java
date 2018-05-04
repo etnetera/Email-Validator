@@ -1,5 +1,6 @@
 import cz.etn.emailvalidator.DNSLookup;
 import cz.etn.emailvalidator.Email;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class LookupTest {
 
 	@Test
+	@Disabled
 	void ipLookupTest() {
 		List<String> ips = DNSLookup.getIPAddresses("seznam.cz");
 		assertFalse(ips.isEmpty());
@@ -28,6 +30,7 @@ public class LookupTest {
 	}
 
 	@Test
+	@Disabled
 	void mxLookupTest() {
 		Email email = new Email("karel@seznam.cz");
 		assertTrue(email.hasMXRecord());
