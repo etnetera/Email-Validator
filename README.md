@@ -5,7 +5,7 @@
 # Email-Validator
 Library for advanced email validation
 
-```
+```xml
 <repositories>
     <repository>
         <id>jcenter</id>
@@ -23,7 +23,7 @@ Library for advanced email validation
 ```
 
 Example:
-```
+```java
 var email = new Email("example@email.com");
 // valid according to RFC 5322
 System.out.println(email.isValid());
