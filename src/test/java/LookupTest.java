@@ -25,7 +25,7 @@ public class LookupTest {
 		ips = DNSLookup.getIPAddresses("www.alza.cz");
 		assertFalse(ips.isEmpty());
 
-		ips = DNSLookup.getIPAddresses("nejakablbost.cz");
+		ips = DNSLookup.getIPAddresses("neexistujicidomena.cz");
 		assertTrue(ips.isEmpty());
 	}
 
@@ -38,7 +38,7 @@ public class LookupTest {
 		email = new Email("karel@alza.cz");
 		assertTrue(email.hasMXRecord());
 
-		email = new Email("karel@nejakablbost.cz");
+		email = new Email("karel@neexistujicidomena.cz");
 		assertFalse(email.hasMXRecord());
 
 		email = new Email("karel@etnetera.cz");

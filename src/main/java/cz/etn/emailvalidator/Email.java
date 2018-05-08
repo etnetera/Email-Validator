@@ -50,12 +50,6 @@ public class Email {
 
 
 	//TODO zakazane znaky v localPart pro seznam, google atd. https://registrace.seznam.cz/
-	//suchy-doprava@gmail.com - DOMAIN_SPECIFIC_SYNTAX_ERROR
-	//macejka.martin.@gmail.com - BAD_CHARACTER
-	//khun.@centrum.cz - BAD_CHARACTER
-	//equi-trek-praha.@email.cz - BAD_CHARACTER
-	//zr.@eurest.cz - BAD_CHARACTER
-	//petr.cerman.@email.cz - BAD_CHARACTER
 
 	//private static final Logger LOG = Logger.getRootLogger();
 

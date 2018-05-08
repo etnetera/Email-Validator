@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 public class IsValidTest {
 
 	private static final String[] validEmails = {
-			"daniel.dvorak@etnetera.cz",
+			"dan@etnetera.cz",
 			"prettyandsimple@example.com",
 			"very.common@example.com",
 			"disposable.style.email.with+symbol@example.com",

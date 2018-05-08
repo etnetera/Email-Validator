@@ -53,7 +53,7 @@ public enum Warning {
 	 */
 	FFC_WIRELESS("FCC wireless", "FCC wireless", EmailState.FFC_WIRELESS),//TODO
 	/**
-	 * Email pravdepodobne obsahuje preklep
+	 * Email might contain typo
 	 */
 	TYPO("typo", "typo", EmailState.TYPO);
 
