@@ -89,17 +89,17 @@ public class UseTest {
 
 	@Test
 	void builderTest() {
-		EmailValidatorBuilder builder = new EmailValidatorBuilder();
-		builder.setSmtpPort(20);
-		builder.setSmtpSllPort(444);
-		builder.setBundle(null);
-		builder.setCheckDns(true);
-		builder.setDisposable(null);
-		builder.setDomains(null);
-		builder.setDomainTypingErrors(null);
-		builder.setGmailSuggestion(null);
-		builder.setIgnoredSuggestions(null);
-		builder.setValidServersList(null);
+		EmailValidatorBuilder builder = new EmailValidatorBuilder()
+		.setSmtpPort(20)
+		.setSmtpSllPort(444)
+		.setBundle(null)
+		.setCheckDns(true)
+		.setDisposable(null)
+		.setDomains(null)
+		.setDomainTypingErrors(null)
+		.setGmailSuggestion(null)
+		.setIgnoredSuggestions(null)
+		.setValidServersList(null);
 		builder.build();
 	}
 }

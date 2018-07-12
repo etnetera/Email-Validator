@@ -27,43 +27,53 @@ public class EmailValidatorBuilder {
 		return new EmailValidator(smtpPort, smtpSllPort, checkDns, domainTypingErrors, gmailSuggestion, ignoredSuggestions, disposable, domains, validServersList, bundle);
 	}
 
-	public void setSmtpPort(int smtpPort) {
+	public EmailValidatorBuilder setSmtpPort(int smtpPort) {
 		this.smtpPort = smtpPort;
+		return this;
 	}
 
-	public void setSmtpSllPort(int smtpSllPort) {
+	public EmailValidatorBuilder setSmtpSllPort(int smtpSllPort) {
 		this.smtpSllPort = smtpSllPort;
+		return this;
 	}
 
-	public void setCheckDns(boolean checkDns) {
+	public EmailValidatorBuilder setCheckDns(boolean checkDns) {
 		this.checkDns = checkDns;
+		return this;
 	}
 
-	public void setDomainTypingErrors(Map<String, String> domainTypingErrors) {
+	public EmailValidatorBuilder setDomainTypingErrors(Map<String, String> domainTypingErrors) {
 		this.domainTypingErrors = domainTypingErrors;
+		return this;
 	}
 
-	public void setGmailSuggestion(Set<String> gmailSuggestion) {
+	public EmailValidatorBuilder setGmailSuggestion(Set<String> gmailSuggestion) {
 		this.gmailSuggestion = gmailSuggestion;
+		return this;
 	}
 
-	public void setIgnoredSuggestions(Set<String> ignoredSuggestions) {
+	public EmailValidatorBuilder setIgnoredSuggestions(Set<String> ignoredSuggestions) {
 		this.ignoredSuggestions = ignoredSuggestions;
+		return this;
 	}
 
-	public void setDisposable(List<String> disposable) {
+	public EmailValidatorBuilder setDisposable(List<String> disposable) {
 		this.disposable = disposable;
+		return this;
 	}
 
-	public void setDomains(Set<String> domains) {
+	public EmailValidatorBuilder setDomains(Set<String> domains) {
 		this.domains = domains;
+		return this;
 	}
 
-	public void setValidServersList(Set<String> validServersList) {
+	public EmailValidatorBuilder setValidServersList(Set<String> validServersList) {
 		this.validServersList = validServersList;
+		return this;
 	}
 
-	public void setBundle(ResourceBundle bundle) {
+	public EmailValidatorBuilder setBundle(ResourceBundle bundle) {
 		this.bundle = bundle;
+		return this;
 	}
 }
