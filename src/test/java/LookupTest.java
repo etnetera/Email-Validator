@@ -1,5 +1,8 @@
 import cz.etn.emailvalidator.DNSLookup;
-import cz.etn.emailvalidator.Email;
+import cz.etn.emailvalidator.EmailValidatorBuilder;
+import cz.etn.emailvalidator.entity.Email;
+import cz.etn.emailvalidator.EmailValidator;
+import cz.etn.emailvalidator.entity.ValidationResult;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -50,7 +53,8 @@ public class LookupTest {
 
 	@Test
 	void validTest() {
-		Email email = new Email("test@gmail.com");
-		assertTrue(email.isDomainInValidMailServersMap());
+		EmailValidator validator = new EmailValidatorBuilder().build();
+		ValidationResult result = validator.validate("test@gmail.com");
+		assertTrue(result.email.isDomainInValidMailServersMap());
 	}
 }

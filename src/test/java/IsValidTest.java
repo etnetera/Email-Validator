@@ -1,19 +1,14 @@
-import cz.etn.emailvalidator.Email;
+import cz.etn.emailvalidator.EmailValidator;
+import cz.etn.emailvalidator.EmailValidatorBuilder;
+import cz.etn.emailvalidator.entity.ValidationResult;
 import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Created by TPa on 14.02.17.
@@ -75,7 +70,11 @@ public class IsValidTest {
 		return DynamicTest.stream(
 				Arrays.asList(validEmails).iterator(),
 				email -> "Testing " + email,
-				email -> assertNull(new Email(email).getError()));
+				email -> {
+					EmailValidator validator = new EmailValidatorBuilder().build();
+					ValidationResult result = validator.validate(email);
+					assertTrue(result.isValid);
+				});
 	}
 
 	@TestFactory
@@ -83,7 +82,11 @@ public class IsValidTest {
 		return DynamicTest.stream(
 				Arrays.asList(invalidEmails).iterator(),
 				email -> "Testing " + email,
-				email -> assertNotNull(new Email(email).getError()));
+				email -> {
+					EmailValidator validator = new EmailValidatorBuilder().build();
+					ValidationResult result = validator.validate(email);
+					assertFalse(result.isValid);
+				});
 	}
 
 }

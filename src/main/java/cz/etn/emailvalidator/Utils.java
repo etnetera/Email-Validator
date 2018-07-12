@@ -7,7 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Created by tomaspavel on 13.2.17.
+ * Created by TPa on 13.2.17.
  */
 public class Utils {
 

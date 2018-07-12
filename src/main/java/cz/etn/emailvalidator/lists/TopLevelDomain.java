@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -22,7 +21,7 @@ import java.util.Set;
  */
 public class TopLevelDomain {
 
-	private static final Set<String> domains = new HashSet<>();
+	public static final Set<String> domains = new HashSet<>();
 
 	static {
 		domains.add("aaa");
@@ -1577,12 +1576,7 @@ public class TopLevelDomain {
 		domains.add("llc");
 		domains.add("sport");
 		domains.add("xn--otu796d");
-	}
-
-
-	public static boolean domainExists(String domain) {
-		Objects.requireNonNull(domain);
-		return domains.contains(domain.toLowerCase());
+		domains.add("charity");
 	}
 
 

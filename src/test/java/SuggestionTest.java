@@ -1,4 +1,6 @@
-import cz.etn.emailvalidator.Email;
+import cz.etn.emailvalidator.EmailValidator;
+import cz.etn.emailvalidator.EmailValidatorBuilder;
+import cz.etn.emailvalidator.entity.ValidationResult;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -6,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Created by tomaspavel on 13.4.17.
@@ -29,9 +31,9 @@ public class SuggestionTest {
 				testData.iterator(),
 				td -> "Testing " + td.input,
 				td -> {
-					Email email = new Email(PREFIX + td.input);
-					email.isValid();
-					assertEquals(td.expected, email.getSuggestion());
+					EmailValidator validator = new EmailValidatorBuilder().build();
+					ValidationResult validationResult = validator.validate(PREFIX + td.input);
+					assertEquals(td.expected, validationResult.email.getSuggestion());
 				});
 	}
 

@@ -1,4 +1,7 @@
-import cz.etn.emailvalidator.Email;
+import cz.etn.emailvalidator.EmailValidator;
+import cz.etn.emailvalidator.EmailValidatorBuilder;
+import cz.etn.emailvalidator.Example;
+import cz.etn.emailvalidator.entity.ValidationResult;
 import cz.etn.emailvalidator.enums.Error;
 import cz.etn.emailvalidator.enums.Warning;
 import org.junit.jupiter.api.Test;
@@ -11,46 +14,48 @@ import static org.junit.jupiter.api.Assertions.*;
  * Created by tomaspavel on 15.2.17.
  */
 public class UseTest {
+	private final EmailValidator validator = new EmailValidatorBuilder().build();
 
 	@Test
 	void okTest() {
-		Email email = new Email("karel.javor@etnetera.cz");
-		boolean isValid = email.isValid();
+		ValidationResult result = validator.validate("karel.javor@etnetera.cz");
+		boolean isValid = result.isValid;
 		assertTrue(isValid);
-		assertTrue(email.getWarnings().isEmpty());
-		assertTrue(email.hasMXRecord());
+		assertTrue(result.messages.isEmpty());
+		assertTrue(result.email.hasMXRecord());
 
-		email = new Email("karel@gnail.com");
-		isValid = email.isValid();
-		List<Warning> warnings = email.getWarnings();
+		result = validator.validate("karel@gnail.com");
+		isValid = result.isValid;
+		List<Warning> warnings = result.email.getWarnings();
 		assertEquals(Warning.TYPO, warnings.get(0));
 		assertTrue(isValid);
-		String sugestion = email.getSuggestion();
+		String sugestion = result.email.getSuggestion();
 		assertEquals("karel@gmail.com", sugestion);
+		assertEquals("Nemysleli jste karel@gmail.com", result.messages.get(0).text);
 
-		email = new Email("marian.@seznam.cz");
-		isValid = email.isValid();
+		result = validator.validate("marian.@seznam.cz");
+		isValid = result.isValid;
 		assertFalse(isValid);
 	}
 
 	@Test
 	void typoTest() {
-		Email email = new Email("karel@gnail.com");
-		boolean isValid = email.isValid();
-		List<Warning> warnings = email.getWarnings();
+		ValidationResult result = validator.validate("karel@gnail.com");
+		boolean isValid = result.isValid;
+		List<Warning> warnings = result.email.getWarnings();
 		assertEquals(Warning.TYPO, warnings.get(0));
 		assertTrue(isValid);
-		String sugestion = email.getSuggestion();
+		String sugestion = result.email.getSuggestion();
 		assertEquals("karel@gmail.com", sugestion);
 
 	}
 
 	@Test
 	void nokTest() {
-		Email email = new Email("marian.@seznam.cz");
-		boolean isValid = email.isValid();
+		ValidationResult result = validator.validate("marian.@seznam.cz");
+		boolean isValid = result.isValid;
 		assertFalse(isValid);
-		assertEquals(Error.BAD_CHARACTER, email.getError());
+		assertEquals(Error.BAD_CHARACTER, result.email.getError());
 	}
 
 	/*@Test //TODO
@@ -65,15 +70,36 @@ public class UseTest {
 
 	@Test
 	void nullTest() {
-		Email email = new Email(null);
-		boolean isValid = email.isValid();
+		ValidationResult result = validator.validate(null);
+		boolean isValid = result.isValid;
 		assertFalse(isValid);
 	}
 
 	@Test
 	void emptyTest() {
-		Email email = new Email("");
-		boolean isValid = email.isValid();
+		ValidationResult result = validator.validate("");
+		boolean isValid = result.isValid;
 		assertFalse(isValid);
+	}
+
+	@Test
+	void exampleTest() {
+		Example.main(new String[]{"test@gnail.com"});
+	}
+
+	@Test
+	void builderTest() {
+		EmailValidatorBuilder builder = new EmailValidatorBuilder();
+		builder.setSmtpPort(20);
+		builder.setSmtpSllPort(444);
+		builder.setBundle(null);
+		builder.setCheckDns(true);
+		builder.setDisposable(null);
+		builder.setDomains(null);
+		builder.setDomainTypingErrors(null);
+		builder.setGmailSuggestion(null);
+		builder.setIgnoredSuggestions(null);
+		builder.setValidServersList(null);
+		builder.build();
 	}
 }
