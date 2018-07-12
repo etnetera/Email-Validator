@@ -21,7 +21,7 @@ public class EmailValidatorBuilder {
 	private List<String> disposable = Disposable.disposableList;
 	private Set<String> domains = TopLevelDomain.domains;
 	private Set<String> validServersList = ValidServers.validServersList;
-	private ResourceBundle bundle = ResourceBundle.getBundle("messages", Locale.forLanguageTag("cs_CZ"));
+	private ResourceBundle bundle = ResourceBundle.getBundle("messages", Locale.forLanguageTag("en-US"));
 
 	public EmailValidator build() {
 		return new EmailValidator(smtpPort, smtpSllPort, checkDns, domainTypingErrors, gmailSuggestion, ignoredSuggestions, disposable, domains, validServersList, bundle);

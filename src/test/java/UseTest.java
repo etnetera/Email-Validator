@@ -31,7 +31,7 @@ public class UseTest {
 		assertTrue(isValid);
 		String sugestion = result.email.getSuggestion();
 		assertEquals("karel@gmail.com", sugestion);
-		assertEquals("Nemysleli jste karel@gmail.com", result.messages.get(0).text);
+		assertEquals("Did you mean karel@gmail.com?", result.messages.get(0).text);
 
 		result = validator.validate("marian.@seznam.cz");
 		isValid = result.isValid;
