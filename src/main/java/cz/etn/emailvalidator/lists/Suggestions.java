@@ -122,7 +122,8 @@ public class Suggestions {
 	public static final Set<String> IGNORED = new HashSet<>(Arrays.asList(
 			"op.pl",
 			"mail.ru",
-			"o2.pl"
+			"o2.pl",
+			"interia.eu"
 	));
 
 }
