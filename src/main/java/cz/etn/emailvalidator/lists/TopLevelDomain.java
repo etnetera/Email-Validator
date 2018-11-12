@@ -1577,6 +1577,7 @@ public class TopLevelDomain {
 		domains.add("sport");
 		domains.add("xn--otu796d");
 		domains.add("charity");
+		domains.add("inc");
 	}
 
 

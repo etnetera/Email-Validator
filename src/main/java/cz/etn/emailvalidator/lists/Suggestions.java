@@ -123,7 +123,8 @@ public class Suggestions {
 			"op.pl",
 			"mail.ru",
 			"o2.pl",
-			"interia.eu"
+			"interia.eu",
+			"hotmail.com"
 	));
 
 }
