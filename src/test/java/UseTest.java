@@ -102,4 +102,14 @@ public class UseTest {
 		.setValidServersList(null);
 		builder.build();
 	}
+
+	@Test
+	void bogusTest() {
+		ValidationResult result = validator.validate("812990365@qq.com");
+		boolean isValid = result.isValid;
+		List<Warning> warnings = result.email.getWarnings();
+		boolean isBogus = warnings.contains(Warning.BOGUS);
+		assertTrue(isBogus);
+		assertTrue(isValid);
+	}
 }

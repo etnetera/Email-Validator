@@ -36,6 +36,7 @@ public class EmailValidator {
 	private final List<String> disposable;
 	private final Set<String> domains;
 	private final Set<String> validServersList;
+	private final List<String> bogusList;
 	private final ResourceBundle messageBundle;
 
 	@SuppressWarnings("unused")
@@ -49,11 +50,12 @@ public class EmailValidator {
 		this.disposable = new ArrayList<>();
 		this.domains = new HashSet<>();
 		this.validServersList = new HashSet<>();
+		this.bogusList = new ArrayList<>();
 		this.messageBundle = null;
 	}
 
 	public EmailValidator(int smtpPort, int smtpSllPort, boolean checkDns, Map<String, String> domainTypingErrors, Set<String> gmailSuggestion,
-						  Set<String> ignoredSuggestions, List<String> disposable, Set<String> domains, Set<String> validServersList, ResourceBundle messageBundle) {
+						  Set<String> ignoredSuggestions, List<String> disposable, Set<String> domains, Set<String> validServersList, List<String> bogusList, ResourceBundle messageBundle) {
 		this.smtpPort = smtpPort;
 		this.smtpSllPort = smtpSllPort;
 		this.checkDns = checkDns;
@@ -63,6 +65,7 @@ public class EmailValidator {
 		this.disposable = disposable;
 		this.domains = domains;
 		this.validServersList = validServersList;
+		this.bogusList = bogusList;
 		this.messageBundle = messageBundle;
 	}
 
@@ -90,9 +93,6 @@ public class EmailValidator {
 		return messages;
 	}
 
-	/**
-	 * @return
-	 */
 	private boolean isValidDomain(Email email) {
 		if (!email.isParsed()) parse(email);
 		if (email.getDomain() == null) {
@@ -232,7 +232,7 @@ public class EmailValidator {
 
 	private static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
 		List<Map.Entry<K, V>> list = new LinkedList<>(map.entrySet());
-		list.sort(Comparator.comparing(o -> (o.getValue())));
+		list.sort(Comparator.comparing(Map.Entry::getValue));
 
 		Map<K, V> result = new LinkedHashMap<>();
 		for (Map.Entry<K, V> entry : list) {
@@ -441,7 +441,7 @@ public class EmailValidator {
 		email.setSuggestion(createSuggestion(email));
 	}
 
-	public boolean domainExists(String domain) {
+	private boolean domainExists(String domain) {
 		Objects.requireNonNull(domain);
 		return domains.contains(domain.toLowerCase());
 	}
@@ -500,6 +500,9 @@ public class EmailValidator {
 
 		if (disposable.contains(email.getDomain())) {
 			email.getWarnings().add(DISPOSABLE);
+		}
+		if (bogusList.contains(email.getDomain())) {
+			email.getWarnings().add(BOGUS);
 		}
 
 		return true;

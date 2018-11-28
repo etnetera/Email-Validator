@@ -1,9 +1,6 @@
 package cz.etn.emailvalidator;
 
-import cz.etn.emailvalidator.lists.Disposable;
-import cz.etn.emailvalidator.lists.Suggestions;
-import cz.etn.emailvalidator.lists.TopLevelDomain;
-import cz.etn.emailvalidator.lists.ValidServers;
+import cz.etn.emailvalidator.lists.*;
 
 import java.util.*;
 
@@ -21,10 +18,11 @@ public class EmailValidatorBuilder {
 	private List<String> disposable = Disposable.disposableList;
 	private Set<String> domains = TopLevelDomain.domains;
 	private Set<String> validServersList = ValidServers.validServersList;
+	private List<String> bogusList = Bogus.bogusList;
 	private ResourceBundle bundle = ResourceBundle.getBundle("messages", Locale.forLanguageTag("en-US"));
 
 	public EmailValidator build() {
-		return new EmailValidator(smtpPort, smtpSllPort, checkDns, domainTypingErrors, gmailSuggestion, ignoredSuggestions, disposable, domains, validServersList, bundle);
+		return new EmailValidator(smtpPort, smtpSllPort, checkDns, domainTypingErrors, gmailSuggestion, ignoredSuggestions, disposable, domains, validServersList,bogusList, bundle);
 	}
 
 	public EmailValidatorBuilder setSmtpPort(int smtpPort) {
@@ -75,5 +73,13 @@ public class EmailValidatorBuilder {
 	public EmailValidatorBuilder setBundle(ResourceBundle bundle) {
 		this.bundle = bundle;
 		return this;
+	}
+
+	public List<String> getBogusList() {
+		return bogusList;
+	}
+
+	public void setBogusList(List<String> bogusList) {
+		this.bogusList = bogusList;
 	}
 }

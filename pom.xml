@@ -6,7 +6,7 @@
 
     <groupId>cz.etn</groupId>
     <artifactId>email-validator</artifactId>
-    <version>1.1.2</version>
+    <version>1.2.0</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
