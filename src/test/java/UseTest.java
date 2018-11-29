@@ -111,5 +111,26 @@ public class UseTest {
 		boolean isBogus = warnings.contains(Warning.BOGUS);
 		assertTrue(isBogus);
 		assertTrue(isValid);
+
+		result = validator.validate("812990365@vip.qq.com");
+		isValid = result.isValid;
+		warnings = result.email.getWarnings();
+		isBogus = warnings.contains(Warning.BOGUS);
+		assertTrue(isBogus);
+		assertTrue(isValid);
+
+		result = validator.validate("812990365@QQ.COM");
+		isValid = result.isValid;
+		warnings = result.email.getWarnings();
+		isBogus = warnings.contains(Warning.BOGUS);
+		assertTrue(isBogus);
+		assertTrue(isValid);
+
+		result = validator.validate("812990365@VIP.QQ.COM");
+		isValid = result.isValid;
+		warnings = result.email.getWarnings();
+		isBogus = warnings.contains(Warning.BOGUS);
+		assertTrue(isBogus);
+		assertTrue(isValid);
 	}
 }

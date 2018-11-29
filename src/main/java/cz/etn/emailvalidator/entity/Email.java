@@ -86,7 +86,7 @@ public class Email {
 	}
 
 	public void setDomain(String domain) {
-		this.domain = domain;
+		this.domain = domain.toLowerCase();
 	}
 
 	public List<String> getDomains() {

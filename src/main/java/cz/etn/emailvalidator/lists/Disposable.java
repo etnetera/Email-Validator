@@ -888,7 +888,6 @@ public class Disposable {
 			"qisdo.com",
 			"qisoa.com",
 			"qoika.com",
-			"qq.com",
 			"quickinbox.com",
 			"quickmail.nl",
 			"rcpt.at",

@@ -290,7 +290,7 @@ public class EmailValidator {
 				}
 				if (part == EmailPart.DOMAIN) {//v domene pridame dalsi cast domeny
 					if (domainStr.length() > 0) {
-						email.getDomains().add(domainStr.toString());
+						email.getDomains().add(domainStr.toString().toLowerCase());
 						domainStr = new StringBuilder();
 					}
 				}
@@ -368,7 +368,7 @@ public class EmailValidator {
 		if (part == EmailPart.DOMAIN) {
 			email.setDomain(sb.toString());
 			if (domainStr.length() > 0) {
-				email.getDomains().add(domainStr.toString());
+				email.getDomains().add(domainStr.toString().toLowerCase());
 			}
 
 		} else {
@@ -501,7 +501,8 @@ public class EmailValidator {
 		if (disposable.contains(email.getDomain())) {
 			email.getWarnings().add(DISPOSABLE);
 		}
-		if (bogusList.contains(email.getDomain())) {
+		boolean isBogus = bogusList.stream().anyMatch(b -> email.getDomain().contains(b));
+		if (isBogus) {
 			email.getWarnings().add(BOGUS);
 		}
 
