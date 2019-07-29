@@ -17,19 +17,28 @@ Library for advanced email validation
     <dependency>
         <groupId>cz.etn</groupId>
         <artifactId>email-validator</artifactId>
-        <version>1.1.2</version>
+        <version>1.2.2</version>
     </dependency>
 <dependencies>
 ```
 
 Example:
 ```java
-var email = new Email("example@email.com");
+EmailValidator validator = new EmailValidatorBuilder().build();
+ValidationResult result = validator.validate("example@email.com");
+
 // valid according to RFC 5322
-System.out.println(email.isValid());
-System.out.println(email.getError());
+System.out.println(result.isValid());
+
+// all validation messages
+System.out.println(result.messages);
+
+// error messages
+System.out.println(result.email.getError());
+
 // TYPO for typos and DISPOSABLE for temporary emails
-System.out.println(email.getWarnings());
+System.out.println(result.email.getWarnings());
+
 // suggested corrections for typos - gnail.com -> gmail.com
-System.out.println(email.getSuggestion());
+System.out.println(result.email.getSuggestion());
 ```

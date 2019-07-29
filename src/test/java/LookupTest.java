@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * Created by tomaspavel on 16.2.17.
  */
 public class LookupTest {
+	private final EmailValidator validator = new EmailValidatorBuilder().build();
 
 	@Test
 	@Disabled
@@ -35,20 +36,32 @@ public class LookupTest {
 	@Test
 	@Disabled
 	void mxLookupTest() {
-		Email email = new Email("karel@seznam.cz");
-		assertTrue(email.hasMXRecord());
+		ValidationResult result = validator.validate("karel@seznam.cz");
+		assertTrue(result.email.hasMXRecord());
 
-		email = new Email("karel@alza.cz");
-		assertTrue(email.hasMXRecord());
+		result = validator.validate("karel@alza.cz");
+		assertTrue(result.email.hasMXRecord());
 
-		email = new Email("karel@neexistujicidomena.cz");
-		assertFalse(email.hasMXRecord());
+		result = validator.validate("karel@neexistujicidomena.cz");
+		assertFalse(result.email.hasMXRecord());
 
-		email = new Email("karel@etnetera.cz");
-		assertTrue(email.hasMXRecord());
+		result = validator.validate("karel@etnetera.cz");
+		assertTrue(result.email.hasMXRecord());
 
-		email = new Email("karel@site.cz");
-		assertFalse(email.hasMXRecord());
+		result = validator.validate("karel@site.cz");
+		assertFalse(result.email.hasMXRecord());
+
+		result = validator.validate("wjj633@126.com");
+		assertTrue(result.email.hasMXRecord());
+
+		result = validator.validate("13472668581@163.com");
+		assertTrue(result.email.hasMXRecord());
+
+		result = validator.validate("144969292@qq.cm");
+		assertTrue(result.email.hasMXRecord());
+
+		result = validator.validate("xiaokang9506@sina.com");
+		assertTrue(result.email.hasMXRecord());
 	}
 
 	@Test

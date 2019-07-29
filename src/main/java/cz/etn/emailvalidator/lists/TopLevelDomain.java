@@ -1578,6 +1578,8 @@ public class TopLevelDomain {
 		domains.add("xn--otu796d");
 		domains.add("charity");
 		domains.add("inc");
+		domains.add("ss");
+		domains.add("xn--mgbah1a3hjkrd");
 	}
 
 

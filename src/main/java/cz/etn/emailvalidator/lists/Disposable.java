@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -866,7 +867,6 @@ public class Disposable {
 			"pimpedupmyspace.com",
 			"pjjkp.com",
 			"plexolan.de",
-			"poczta.onet.pl",
 			"politikerclub.de",
 			"poofy.org",
 			"pookmail.com",
@@ -1320,6 +1320,10 @@ public class Disposable {
 
 
 	private static void check() throws Exception {
+		List<String> excluded = new ArrayList<String>() {{
+			add("poczta.onet.pl");
+		}};
+
 		URL url = new URL("https://gist.githubusercontent.com/hassanazimi/d6e49469258d7d06f9f4/raw/3290da2d85dbce01b37e5fd4fcc219778bd69b35/disposable_email_addresses");
 		URLConnection con = url.openConnection();
 		InputStream in = con.getInputStream();
@@ -1338,9 +1342,7 @@ public class Disposable {
 		while (scanner.hasNext()) {
 			String line = scanner.nextLine();
 			if (!line.startsWith("#")) {
-				//if(!MAP.containsKey(line.toLowerCase())) {
-				if (!disposableList.contains(line.toLowerCase())) {
-					//System.out.println("{\"" + line.toLowerCase() + "\", new TopLevelDomain(\"" + line.toLowerCase() + "\", Type.UNKNOWN, null)},");
+				if (!disposableList.contains(line.toLowerCase()) && !excluded.contains(line.toLowerCase())) {
 					System.out.println("\"" + line.toLowerCase() + "\",");
 					missingCnt++;
 				}
