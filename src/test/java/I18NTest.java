@@ -21,8 +21,8 @@ public class I18NTest {
 
 	@Test
 	void pamametrized() {
-		assertEquals("Nemysleli jste {0}", I18N.getTranslation("Warning.TYPO", Locale.forLanguageTag("cs-CZ"), (Object[]) null));
-		assertEquals("Nemysleli jste test@gmail.com", I18N.getTranslation("Warning.TYPO", Locale.forLanguageTag("cs-CZ"), "test@gmail.com"));
+		assertEquals("Nemysleli jste {0}?", I18N.getTranslation("Warning.TYPO", Locale.forLanguageTag("cs-CZ"), (Object[]) null));
+		assertEquals("Nemysleli jste test@gmail.com?", I18N.getTranslation("Warning.TYPO", Locale.forLanguageTag("cs-CZ"), "test@gmail.com"));
 	}
 
 	@Test

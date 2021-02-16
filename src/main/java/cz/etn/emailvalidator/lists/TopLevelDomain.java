@@ -1580,6 +1580,17 @@ public class TopLevelDomain {
 		domains.add("inc");
 		domains.add("ss");
 		domains.add("xn--mgbah1a3hjkrd");
+		domains.add("amazon");
+		domains.add("cpa");
+		domains.add("gay");
+		domains.add("llp");
+		domains.add("spa");
+		domains.add("xn--4dbrk0ce");
+		domains.add("xn--cckwcxetd");
+		domains.add("xn--jlq480n2rg");
+		domains.add("xn--mgbcpq6gpa1a");
+		domains.add("xn--q7ce6a");
+		domains.add("xn--qxa6a");
 	}
 
 
