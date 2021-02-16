@@ -17,7 +17,7 @@ Library for advanced email validation
     <dependency>
         <groupId>cz.etn</groupId>
         <artifactId>email-validator</artifactId>
-        <version>1.2.2</version>
+        <version>1.2.3</version>
     </dependency>
 <dependencies>
 ```
