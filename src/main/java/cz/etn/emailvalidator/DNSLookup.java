@@ -1,16 +1,11 @@
 package cz.etn.emailvalidator;
 
-import com.sun.mail.smtp.SMTPTransport;
 
-import javax.mail.Session;
-import javax.mail.URLName;
 import javax.naming.Context;
 import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.InitialDirContext;
-import java.net.InetAddress;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -29,12 +24,8 @@ public class DNSLookup {
 	private static final String MX_ATTRIB = "MX";
 	private static final String ADDR_ATTRIB_IPV4 = "A";
 	private static final String ADDR_ATTRIB_IPV6 = "AAAA";
-	private static final String PTR_ATTRIB = "PTR";
-	private static final String CNAME_ATTRIB = "CNAME";
 	private static String[] MX_ATTRIBS = {MX_ATTRIB};
 	private static String[] ADDR_ATTRIBS = {ADDR_ATTRIB_IPV4, ADDR_ATTRIB_IPV6};
-	//private static String[] PTR_ATTRIBS = {PTR_ATTRIB};
-	private static String[] CNAME_ATTRIBS = {CNAME_ATTRIB};
 
 	//private static final Logger LOG = Logger.getRootLogger();
 
@@ -45,23 +36,6 @@ public class DNSLookup {
 	}
 
 	//============== VEREJNE METODY INSTANCE ====================================
-	public static String getCName(String domain) {
-		StringBuilder sb = new StringBuilder();
-		try {
-			InitialDirContext idc = new InitialDirContext(env);
-			Attributes attrs = idc.getAttributes(domain, CNAME_ATTRIBS);
-			Attribute attr = attrs.get(CNAME_ATTRIB);
-			if (attr != null) {
-				for (int i = 0; i < attr.size(); i++) {
-					String cnameAttr = (String) attr.get(i);
-					sb.append(cnameAttr).append("\n");
-				}
-			}
-		} catch (NamingException e) {
-			//LOG.warn("unable to get CNAME for " + domain, e);
-		}
-		return sb.toString();
-	}
 
 	/**
 	 * @return list of mx records for domain
@@ -120,50 +94,4 @@ public class DNSLookup {
 		return ipAddresses;
 	}
 
-
-/*
-	public static String getRevName(String ipAddr) throws NamingException {
-
-		String revName = null;
-		String[] quads = ipAddr.split("\\.");
-
-		//StringBuilder would be better, I know.
-		ipAddr = "";
-
-		for (int i = quads.length - 1; i >= 0; i--) {
-			ipAddr += quads[i] + ".";
-		}
-
-		ipAddr += "in-addr.arpa.";
-		Attributes attrs = idc.getAttributes(ipAddr, PTR_ATTRIBS);
-		Attribute attr = attrs.get(PTR_ATTRIB);
-
-		if (attr != null) {
-			revName = (String) attr.get(0);
-		}
-
-		return revName;
-	}*/
-
-	/**
-	 * http://www.serversmtp.com/en/smtp-error
-	 *
-	 * @param mx adresa mx serveru, na ktery se pokusime pripojit
-	 * @return smtp code po navazani spojeni jinak null
-	 */
-	private static Integer getMxServerStatus(String mx, int port) {
-		try {
-			Properties mailProps = new Properties();
-			mailProps.put("mail.smtp.host", mx);
-			mailProps.put("mail.host", mx);
-			mailProps.put("mail.smtp.port", String.valueOf(port));
-			SMTPTransport smtp = new SMTPTransport(Session.getInstance(mailProps), new URLName(mx));
-			Socket socket = new Socket(InetAddress.getByName(mx), port);
-			smtp.connect(socket);
-			return smtp.getLastReturnCode();
-		} catch (Exception e) {
-			//LOG.error("unable to check mx server", e);
-		}
-		return null;
-	}
 }
