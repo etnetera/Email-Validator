@@ -1592,6 +1592,7 @@ public class TopLevelDomain {
 		domains.add("xn--q7ce6a");
 		domains.add("xn--qxa6a");
 		domains.add("music");
+		domains.add("kids");
 	}
 
 
