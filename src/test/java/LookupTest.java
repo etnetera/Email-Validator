@@ -1,6 +1,5 @@
 import cz.etn.emailvalidator.DNSLookup;
 import cz.etn.emailvalidator.EmailValidatorBuilder;
-import cz.etn.emailvalidator.entity.Email;
 import cz.etn.emailvalidator.EmailValidator;
 import cz.etn.emailvalidator.entity.ValidationResult;
 import org.junit.jupiter.api.Disabled;
