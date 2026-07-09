@@ -23,6 +23,3 @@ System.out.println(result.email.getWarnings());
 // suggested corrections for typos - gnail.com -> gmail.com
 System.out.println(result.email.getSuggestion());
 ```
-
-## Publication to Artifactory
-`./gradlew -P publish.ivy.target=$PUBLICATION_TARGET -P publish.ivy.base-url=$ARTIFACTORY_URL -P publish.ivy.credentials.user=$ARTIFACTORY_USER -P publish.ivy.credentials.password=$ARTIFACTORY_PASSWORD publish`
