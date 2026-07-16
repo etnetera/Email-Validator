@@ -1,0 +1,100 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "cz.etn",
+    "module": "email-validator",
+    "version": "1.4.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.7"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 11,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "email-validator-1.4.0.jar",
+          "url": "email-validator-1.4.0.jar",
+          "size": 76925,
+          "sha512": "1fd1379dc0c0570d4cefe35b7fa2dbf9e0e554307931f34e9a58fd4477d2a620cd334181ef179877240e7bc6fab3b526123cdd34865ea32ea9b97a660ee19c85",
+          "sha256": "9f1dd670ac9c3ea6343e89c80d2615727af121cf6c315c217615984e33b2b587",
+          "sha1": "fcfeb5e655b54747f4f3aa2fe46f3f2ef22d3701",
+          "md5": "8026127e7754519fe0a0735e315a1291"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 11,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "email-validator-1.4.0.jar",
+          "url": "email-validator-1.4.0.jar",
+          "size": 76925,
+          "sha512": "1fd1379dc0c0570d4cefe35b7fa2dbf9e0e554307931f34e9a58fd4477d2a620cd334181ef179877240e7bc6fab3b526123cdd34865ea32ea9b97a660ee19c85",
+          "sha256": "9f1dd670ac9c3ea6343e89c80d2615727af121cf6c315c217615984e33b2b587",
+          "sha1": "fcfeb5e655b54747f4f3aa2fe46f3f2ef22d3701",
+          "md5": "8026127e7754519fe0a0735e315a1291"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "email-validator-1.4.0-sources.jar",
+          "url": "email-validator-1.4.0-sources.jar",
+          "size": 38565,
+          "sha512": "e9d447d23f0cff43fb0b97e74785684f0e008b810bc891a772d8a9c1941581d02d5109471a8fbdcdef7fb989b5122a3fad10f164ca9ab934e7f0a964fd3a52b3",
+          "sha256": "c9e4bfebbd0352ba41f4a07e539a37b92e0072100238b92b81fd2b3c01fcd26d",
+          "sha1": "ad51b060fb75f3c431d6467fbbce7af16da2888e",
+          "md5": "8aaa5444647b33ebe276695410704f78"
+        }
+      ]
+    },
+    {
+      "name": "javadocElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "javadoc",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "email-validator-1.4.0-javadoc.jar",
+          "url": "email-validator-1.4.0-javadoc.jar",
+          "size": 382774,
+          "sha512": "61723c9c1b9cf97e9694362375b50eeb195c09601742cc785b235f896e2d9edd3efaeb96b235a965eecd124ef268b53481246b311f78ef2b414e434a9c012ea0",
+          "sha256": "5d4347c8d289c881e03f5dc08d21cbe67672d2893472debc9b1d34efaf7af80c",
+          "sha1": "17f2fbd6858b908de500783c9e1cca293f2fa3ef",
+          "md5": "815c2433fcb8b3ad0b09a7851046273c"
+        }
+      ]
+    }
+  ]
+}
