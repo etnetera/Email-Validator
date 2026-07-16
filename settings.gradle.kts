@@ -3,3 +3,5 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
+rootProject.name = "email-validator"

@@ -25,7 +25,7 @@ public enum Error {
 	 */
 	BAD_CHARACTER(),
 	/**
-	 * Email address has multiple ‘.com’s at the end of the address. For example: "nemo@aol.com.com"
+	 * Email address has multiple '.com's at the end of the address. For example: "nemo@aol.com.com"
 	 */
 	DOUBLE_TLD(),
 	/**

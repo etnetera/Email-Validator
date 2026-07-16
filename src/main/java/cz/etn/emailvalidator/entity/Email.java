@@ -19,10 +19,10 @@ import java.util.List;
  * The local-part of the email address may use any of these ASCII characters RFC 5322
  * · Uppercase and lowercase English letters (a–z, A–Z) (ASCII: 65-90, 97-122)
  * · Digits 0 to 9 (ASCII: 48-57)
- * · Characters !#$%&'*+-/=?^_`{|}~ (ASCII: 33, 35-39, 42, 43, 45, 47, 61, 63, 94-96, 123-126)
+ *  * Characters !#$%&amp;'*+-/=?^_`{|}~ (ASCII: 33, 35-39, 42, 43, 45, 47, 61, 63, 94-96, 123-126)
  * · Character . (dot, period, full stop) (ASCII: 46) provided that it is not the first or last character, and provided also that it does not appear two or more times consecutively (e.g. John..Doe@example.com is not allowed.).
  * · Special characters are allowed with restrictions. They are:
- * o Space and "(),:;<>@[] (ASCII: 32, 34, 40, 41, 44, 58, 59, 60, 62, 64, 91-93)
+ * o Space and "(),:;&lt;&gt;@[] (ASCII: 32, 34, 40, 41, 44, 58, 59, 60, 62, 64, 91-93)
  * The restrictions for special characters are that they must only be used when contained between quotation marks, and that 3 of them (The space, backslash \ and quotation mark " (ASCII: 32, 92, 34)) must also be preceded by a backslash \ (e.g. "\ \\"").
  *
  * @author DDv, TPa

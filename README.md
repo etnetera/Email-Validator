@@ -23,3 +23,37 @@ System.out.println(result.email.getWarnings());
 // suggested corrections for typos - gnail.com -> gmail.com
 System.out.println(result.email.getSuggestion());
 ```
+
+## Use
+
+Coordinates: `cz.etn:email-validator:<version>`.
+
+### Gradle
+
+```kotlin
+repositories {
+    maven { url = uri("https://etnetera.github.io/Email-Validator/") }
+    mavenCentral()
+}
+
+dependencies {
+    implementation("cz.etn:email-validator:1.4.0")
+}
+```
+
+### Maven
+
+```xml
+<repositories>
+    <repository>
+        <id>email-validator-github-pages</id>
+        <url>https://etnetera.github.io/Email-Validator/</url>
+    </repository>
+</repositories>
+
+<dependency>
+    <groupId>cz.etn</groupId>
+    <artifactId>email-validator</artifactId>
+    <version>1.4.0</version>
+</dependency>
+```
