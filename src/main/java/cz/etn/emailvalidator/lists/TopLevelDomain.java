@@ -1593,6 +1593,7 @@ public class TopLevelDomain {
 		domains.add("xn--qxa6a");
 		domains.add("music");
 		domains.add("kids");
+		domains.add("merck");
 	}
 
 

@@ -1466,7 +1466,7 @@ public class Disposable {
 			add("poczta.onet.pl");
 		}};
 
-		URL url = new URL("https://raw.githubusercontent.com/disposable-email-domains/disposable-email-domains/master/allowlist.conf");
+		URL url = new URL("https://github.com/disposable-email-domains/disposable-email-domains/raw/refs/heads/main/disposable_email_blocklist.conf");
 		URLConnection con = url.openConnection();
 		InputStream in = con.getInputStream();
 		String encoding = con.getContentEncoding();  // ** WRONG: should use "con.getContentType()" instead but it returns something like "text/html; charset=UTF-8" so this value must be parsed to extract the actual encoding
